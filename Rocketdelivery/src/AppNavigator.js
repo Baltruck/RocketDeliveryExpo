@@ -5,6 +5,9 @@ import HomeScreen from './screens/HomeScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import Footer from './components/Footer';
 import globalStyles from './globalStyles';
+import LoginScreen from './screens/LoginScreen';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 const Stack = createStackNavigator();
@@ -35,6 +38,8 @@ function Details(props) {
 }
 
 function AppNavigator() {
+    const navigation = useNavigation();
+    
     return (
       <Stack.Navigator
         screenOptions={{
@@ -44,8 +49,20 @@ function AppNavigator() {
           },
         }}
       >
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: 'Home',
+            headerRight: () => (
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={globalStyles.headerButton}>Login</Text>
+              </TouchableOpacity>
+            ),
+          }}
+        />
         <Stack.Screen name="Détails" component={Details} />
+        <Stack.Screen name="Login" component={LoginScreen} />
       </Stack.Navigator>
     );
   }

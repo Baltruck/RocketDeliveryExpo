@@ -6,4 +6,8 @@ export default StyleSheet.create({
     fontFamily: 'Oswald-Regular',
     // fontSize: 24,
   },
+  headerButton: {
+    fontSize: 16,
+    marginRight: 10,
+  },
 });
