@@ -48,17 +48,20 @@ const RestaurantsScreen = () => {
 
   // Filter restaurants based on selected rating and price
   const filteredRestaurants = restaurants.filter((restaurant) => {
-    if (
-      selectedRating !== "all" &&
-      restaurant.restaurant_rating !== parseFloat(selectedRating)
-    ) {
-      return false;
+    if (selectedRating !== "all") {
+      const rating = restaurant.restaurant_rating;
+      const lowerBound = parseFloat(selectedRating) - 0.5;
+      const upperBound = parseFloat(selectedRating) + 0.5;
+      if (rating < lowerBound || rating > upperBound) {
+        return false;
+      }
     }
     if (selectedPrice !== "all" && restaurant.price_range !== parseInt(selectedPrice)) {
       return false;
     }
     return true;
   });
+  
 
 
   return (
