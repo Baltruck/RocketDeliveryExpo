@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native';
 import { useState } from 'react';
@@ -9,11 +9,12 @@ const LoginScreen = () => {
   const [password, setPassword] = React.useState('');
   const navigation = useNavigation();
   const [error, setError] = useState('');
-  const redirApi = 'https://6895-74-50-186-92.ngrok-free.app/';
+  const redirApi = 'https://208d-74-50-186-92.ngrok-free.app/';
 
   const handleLogin = () => {
     // Change for the new ngrok redirect url
-    fetch('https://6895-74-50-186-92.ngrok-free.app/api/login', {
+    // fetch('https://208d-74-50-186-92.ngrok-free.app/api/login', {
+      fetch(`${redirApi}api/login`, {
       // fetch('http://localhost:3000/api/login', {
       method: 'POST',
       headers: {
