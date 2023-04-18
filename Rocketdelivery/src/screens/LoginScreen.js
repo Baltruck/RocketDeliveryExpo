@@ -28,7 +28,7 @@ const LoginScreen = () => {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
-        navigation.navigate('Home');
+        navigation.navigate('Restaurants');
       } else {
         setError('Invalid email or password');
       }
