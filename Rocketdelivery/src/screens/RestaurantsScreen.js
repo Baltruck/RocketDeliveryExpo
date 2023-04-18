@@ -4,13 +4,45 @@ import { Picker } from "@react-native-picker/picker";
 import { Card } from "react-native-elements";
 import { FontAwesome as Icon } from "@expo/vector-icons";
 import globalStyles from "../globalStyles";
+import { Asset } from "expo-asset";
+import Constants from "expo-constants";
+
+// import image for random restaurant images
+const localImages = [
+  require("../../assets/Images/Restaurants/cuisineGreek.jpg"),
+  require("../../assets/Images/Restaurants/cuisineJapanese.jpg"),
+  require("../../assets/Images/Restaurants/cuisinePasta.jpg"),
+  require("../../assets/Images/Restaurants/cuisinePizza.jpg"),
+  require("../../assets/Images/Restaurants/cuisineSoutheast.jpg"),
+  require("../../assets/Images/Restaurants/cuisineViet.jpg"),
+];
 
 const RestaurantsScreen = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [selectedRating, setSelectedRating] = useState("all");
   const [selectedPrice, setSelectedPrice] = useState("all");
+  const [restaurantImages, setRestaurantImages] = useState([]);
+
+  //   // Load restaurant images randomly
+  //   const loadRestaurantImages = async () => {
+  //     const images = [];
+  //     const imageFolder = `${Constants.manifest.extra.assetBaseUrl}/Images/Restaurants`;
+
+  //     for (let i = 1; i <= 6; i++) {
+  //       const image = await Asset.fromModule(
+  //         require(`../../assets/Images/Restaurants/${i}.jpg`)
+  //         // require(`.../assets/Images/Restaurants/${i}.jpg`)
+  //       ).downloadAsync();
+  //       images.push(image.uri);
+  //     }
+
+  //     return images;
+  //   };
 
   useEffect(() => {
+    // Set local restaurant images
+    setRestaurantImages(localImages);
+
     // Fetch restaurants data from database
     fetch("https://2ee4-74-50-186-92.ngrok-free.app/api/restaurants")
       .then((response) => response.json())
@@ -82,11 +114,14 @@ const RestaurantsScreen = () => {
           return (
             <Card key={index} containerStyle={styles.card}>
               <Image
-                source={{
-                  uri: `https://source.unsplash.com/300x150/?restaurant/${restaurant.id}`,
-                }}
+                source={
+                  restaurantImages[
+                    Math.floor(Math.random() * restaurantImages.length)
+                  ]
+                }
                 style={styles.cardImage}
               />
+
               <Text style={styles.cardTitle}>{restaurant.name}</Text>
               <View style={styles.cardStars}>
                 {[...Array(restaurant.restaurant_rating)].map((e, i) => (
