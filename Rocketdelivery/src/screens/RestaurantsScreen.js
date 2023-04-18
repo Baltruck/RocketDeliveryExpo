@@ -153,9 +153,12 @@ const styles = StyleSheet.create({
       marginBottom: 20,
       borderRadius: 10,
       overflow: "hidden",
-      paddingHorizontal: 5,
+      paddingHorizontal: 0,
+      paddingVertical: 0,
+      paddingBottom: 10,
     },
     cardImage: {
+      borderWidth: 0,
       width: "100%",
       height: 150,
       resizeMode: "cover",
@@ -180,9 +183,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: 10,
       },
-    // cardsContent: {
-    //   justifyContent: "space-between",
-    // },
   });
   
 
