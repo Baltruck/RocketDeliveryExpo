@@ -50,15 +50,16 @@ const RestaurantsScreen = () => {
   const filteredRestaurants = restaurants.filter((restaurant) => {
     if (
       selectedRating !== "all" &&
-      restaurant.restaurant_rating !== parseInt(selectedRating)
+      restaurant.restaurant_rating !== parseFloat(selectedRating)
     ) {
       return false;
     }
-    if (selectedPrice !== "all" && restaurant.price_range !== selectedPrice) {
+    if (selectedPrice !== "all" && restaurant.price_range !== parseInt(selectedPrice)) {
       return false;
     }
     return true;
   });
+
 
   return (
     <View style={styles.container}>
@@ -94,7 +95,8 @@ const RestaurantsScreen = () => {
       </View>
       <Text style={styles.cardTitle}>RESTAURANTS</Text>
       <ScrollView contentContainerStyle={styles.cardsContainer}>
-        {filteredRestaurants.map((restaurant, index) => {
+      {filteredRestaurants.map((restaurant, index) => {
+
           return (
             <Card key={index} containerStyle={styles.card}>
               <Image
@@ -108,7 +110,7 @@ const RestaurantsScreen = () => {
 
               <Text style={styles.cardTitle}>{restaurant.name}</Text>
               <View style={styles.cardStars}>
-                {[...Array(restaurant.restaurant_rating)].map((e, i) => (
+              {[...Array(parseInt(restaurant.restaurant_rating))].map((e, i) => (
                   <Icon key={i} name="star" style={styles.starIcon} />
                 ))}
               </View>
