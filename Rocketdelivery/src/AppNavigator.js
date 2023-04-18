@@ -7,7 +7,8 @@ import Footer from './components/Footer';
 import globalStyles from './globalStyles';
 import LoginScreen from './screens/LoginScreen';
 import { useNavigation } from '@react-navigation/native';
-// import RestaurantsScreen from './screens/RestaurantsScreen';
+import RestaurantsScreen from './screens/RestaurantsScreen';
+
 
 
 
@@ -63,7 +64,7 @@ function AppNavigator() {
       />
       <Stack.Screen name="Détails" component={Details} />
       <Stack.Screen name="Login" component={LoginScreen} />
-      {/* <Stack.Screen name="Restaurants" component={RestaurantsScreen} /> */}
+      <Stack.Screen name="Restaurants" component={RestaurantsScreen} />
     </Stack.Navigator>
   );
 }

@@ -9,7 +9,7 @@ const LoginScreen = () => {
   const [password, setPassword] = React.useState('');
   const navigation = useNavigation();
   const [error, setError] = useState('');
-  const redirApi = 'https://208d-74-50-186-92.ngrok-free.app/';
+  const redirApi = 'https://2ee4-74-50-186-92.ngrok-free.app/';
 
   const handleLogin = () => {
     // Change for the new ngrok redirect url
