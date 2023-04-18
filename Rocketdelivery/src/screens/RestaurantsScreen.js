@@ -23,22 +23,6 @@ const RestaurantsScreen = () => {
   const [selectedPrice, setSelectedPrice] = useState("all");
   const [restaurantImages, setRestaurantImages] = useState([]);
 
-  //   // Load restaurant images randomly
-  //   const loadRestaurantImages = async () => {
-  //     const images = [];
-  //     const imageFolder = `${Constants.manifest.extra.assetBaseUrl}/Images/Restaurants`;
-
-  //     for (let i = 1; i <= 6; i++) {
-  //       const image = await Asset.fromModule(
-  //         require(`../../assets/Images/Restaurants/${i}.jpg`)
-  //         // require(`.../assets/Images/Restaurants/${i}.jpg`)
-  //       ).downloadAsync();
-  //       images.push(image.uri);
-  //     }
-
-  //     return images;
-  //   };
-
   useEffect(() => {
     // Set local restaurant images
     setRestaurantImages(localImages);
@@ -109,7 +93,7 @@ const RestaurantsScreen = () => {
         </View>
       </View>
       <Text style={styles.cardTitle}>RESTAURANTS</Text>
-      <ScrollView style={styles.cardsContainer}>
+      <ScrollView contentContainerStyle={styles.cardsContainer}>
         {filteredRestaurants.map((restaurant, index) => {
           return (
             <Card key={index} containerStyle={styles.card}>
@@ -137,59 +121,69 @@ const RestaurantsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-  },
-  header: {
-    backgroundColor: "#fff",
-    padding: 20,
-  },
-  headerText: {
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  filterContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 10,
-  },
-  filterText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginRight: 10,
-  },
-  filterPicker: {
-    flex: 1,
-    height: 50,
-  },
-  card: {
-    marginBottom: 20,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  cardImage: {
-    height: 150,
-    resizeMode: "cover",
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    margin: 10,
-  },
-  cardStars: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: 10,
-  },
-  starIcon: {
-    color: "#ffcc00",
-    marginRight: 2,
-  },
-  cardsContainer: {
-    padding: 10,
-  },
-});
+    container: {
+      flex: 1,
+      padding: 10,
+    },
+    header: {
+      backgroundColor: "#fff",
+      padding: 20,
+    },
+    headerText: {
+      fontWeight: "bold",
+      fontSize: 20,
+    },
+    filterContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginTop: 10,
+    },
+    filterText: {
+      fontSize: 16,
+      fontWeight: "bold",
+      marginRight: 10,
+    },
+    filterPicker: {
+      flex: 1,
+      height: 50,
+    },
+    card: {
+      width: "41%",
+      marginBottom: 20,
+      borderRadius: 10,
+      overflow: "hidden",
+      paddingHorizontal: 5,
+    },
+    cardImage: {
+      width: "100%",
+      height: 150,
+      resizeMode: "cover",
+    },
+    cardTitle: {
+      fontSize: 18,
+      fontWeight: "bold",
+      margin: 10,
+    },
+    cardStars: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginLeft: 10,
+    },
+    starIcon: {
+      color: "#ffcc00",
+      marginRight: 2,
+    },
+    cardsContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        padding: 10,
+      },
+    // cardsContent: {
+    //   justifyContent: "space-between",
+    // },
+  });
+  
 
 export default RestaurantsScreen;
