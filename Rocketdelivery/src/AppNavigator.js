@@ -7,6 +7,8 @@ import Footer from './components/Footer';
 import globalStyles from './globalStyles';
 import LoginScreen from './screens/LoginScreen';
 import { useNavigation } from '@react-navigation/native';
+// import RestaurantsScreen from './screens/RestaurantsScreen';
+
 
 
 
@@ -38,34 +40,34 @@ function Details(props) {
 }
 
 function AppNavigator() {
-    const navigation = useNavigation();
-    
-    return (
-      <Stack.Navigator
-        screenOptions={{
-          headerTitleStyle: globalStyles.title,
-          headerStyle: {
-            backgroundColor: '#fff',
-          },
-        }}
-      >
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            title: 'Home',
-            headerRight: () => (
-              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={globalStyles.headerButton}>Login</Text>
-              </TouchableOpacity>
-            ),
-          }}
-        />
-        <Stack.Screen name="Détails" component={Details} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-      </Stack.Navigator>
-    );
-  }
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleStyle: globalStyles.title,
+        headerStyle: {
+          backgroundColor: '#fff',
+        },
+      }}
+    >
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={({ navigation }) => ({
+          title: 'Home',
+          headerRight: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text style={globalStyles.headerButton}>Login</Text>
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen name="Détails" component={Details} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      {/* <Stack.Screen name="Restaurants" component={RestaurantsScreen} /> */}
+    </Stack.Navigator>
+  );
+}
+
 
 const styles = StyleSheet.create({
   container: {
