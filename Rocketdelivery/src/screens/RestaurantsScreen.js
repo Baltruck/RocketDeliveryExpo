@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Card } from "react-native-elements";
 import { FontAwesome as Icon } from "@expo/vector-icons";
 import globalStyles from "../globalStyles";
 import { Asset } from "expo-asset";
 import Constants from "expo-constants";
+import { useNavigation } from '@react-navigation/native';
+import MenuScreen from './MenuScreen';
+
+const RestaurantsScreen = () => {
+  const [restaurants, setRestaurants] = useState([]);
+  const [selectedRating, setSelectedRating] = useState("all");
+  const [selectedPrice, setSelectedPrice] = useState("all");
+  const [restaurantImages, setRestaurantImages] = useState([]);
+
+
+// send id to menu screen
+const navigation = useNavigation();
+const handleCardPress = (restaurantId) => {
+  navigation.navigate('Menu', { restaurantId });
+};
 
 // import image for random restaurant images
 const localImages = [
@@ -16,12 +31,6 @@ const localImages = [
   require("../../assets/Images/Restaurants/cuisineSoutheast.jpg"),
   require("../../assets/Images/Restaurants/cuisineViet.jpg"),
 ];
-
-const RestaurantsScreen = () => {
-  const [restaurants, setRestaurants] = useState([]);
-  const [selectedRating, setSelectedRating] = useState("all");
-  const [selectedPrice, setSelectedPrice] = useState("all");
-  const [restaurantImages, setRestaurantImages] = useState([]);
 
   useEffect(() => {
     // Set local restaurant images
@@ -46,8 +55,9 @@ const RestaurantsScreen = () => {
     setSelectedPrice(value);
   };
 
-  // Filter restaurants based on selected rating and price
-  const filteredRestaurants = restaurants.filter((restaurant) => {
+
+ // Filter restaurants based on selected rating and price
+ const filteredRestaurants = restaurants.filter((restaurant) => {
     if (selectedRating !== "all") {
       const rating = restaurant.restaurant_rating;
       const lowerBound = parseFloat(selectedRating) - 0.5;
@@ -56,11 +66,37 @@ const RestaurantsScreen = () => {
         return false;
       }
     }
-    if (selectedPrice !== "all" && restaurant.price_range !== parseInt(selectedPrice)) {
-      return false;
+    if (selectedPrice !== "all") {
+      const priceRange = restaurant.price_range;
+      switch (selectedPrice) {
+        case "$":
+          if (priceRange > 1) {
+            return false;
+          }
+          break;
+        case "$$":
+          if (priceRange < 2 || priceRange > 2) {
+            return false;
+          }
+          break;
+        case "$$$":
+          if (priceRange < 3 || priceRange > 3) {
+            return false;
+          }
+          break;
+        case "$$$$":
+          if (priceRange < 4 || priceRange > 4) {
+            return false;
+          }
+          break;
+        default:
+          return true;
+      }
     }
     return true;
   });
+
+  
   
 
 
@@ -101,6 +137,8 @@ const RestaurantsScreen = () => {
       {filteredRestaurants.map((restaurant, index) => {
 
           return (
+            <TouchableOpacity key={restaurant.id} onPress={() => handleCardPress(restaurant.id)}>
+             {/* <TouchableOpacity onPress={handleCardPress}> */}
             <Card key={index} containerStyle={styles.card}>
               <Image
                 source={
@@ -118,6 +156,7 @@ const RestaurantsScreen = () => {
                 ))}
               </View>
             </Card>
+             </TouchableOpacity>
           );
         })}
       </ScrollView>

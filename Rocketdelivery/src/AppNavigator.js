@@ -8,6 +8,7 @@ import globalStyles from './globalStyles';
 import LoginScreen from './screens/LoginScreen';
 import { useNavigation } from '@react-navigation/native';
 import RestaurantsScreen from './screens/RestaurantsScreen';
+import MenuScreen from './screens/MenuScreen';
 
 
 
@@ -65,6 +66,7 @@ function AppNavigator() {
       <Stack.Screen name="Détails" component={Details} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Restaurants" component={RestaurantsScreen} />
+      <Stack.Screen name="Menu" component={MenuScreen} />
     </Stack.Navigator>
   );
 }
