@@ -181,6 +181,7 @@ const MenuScreen = ({ route }) => {
               <TouchableOpacity
                 style={styles.itemCounterButton}
                 onPress={() => handleQuantityChange(item.id, item.quantity + 1)}
+
               >
                 <Text style={styles.itemCounterButtonText}>+</Text>
               </TouchableOpacity>
