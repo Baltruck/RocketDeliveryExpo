@@ -25,9 +25,11 @@ const MenuScreen = ({ route }) => {
   const { restaurantId } = route.params;
   const [restaurant, setRestaurant] = useState(null);
   const [products, setProducts] = useState([]);
+//   const [orderItems, setOrderItems] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
   const [orderButtonDisabled, setOrderButtonDisabled] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  
 
   useEffect(() => {
     // Fetch restaurant data from database
@@ -69,6 +71,7 @@ const MenuScreen = ({ route }) => {
   
 
   const handleQuantityChange = (productId, newQuantity) => {
+    const itemsInOrder = products.filter((item) => item.quantity > 0);
     // Update products array based on quantity change
     const updatedProducts = products.map((item) => {
       if (item.id === productId) {
@@ -86,13 +89,17 @@ const MenuScreen = ({ route }) => {
 
   const handleOrderButtonPress = () => {
     // Check if any item has a quantity greater than zero
-    const itemsInOrder = orderItems.filter((item) => item.quantity > 0);
+    const itemsInOrder = products.filter((item) => item.quantity > 0);
     if (itemsInOrder.length > 0) {
+    //   setOrderItems(itemsInOrder);
       // Open confirmation modal for order
       setModalVisible(true);
     }
-  };
+};
 
+  
+  
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -184,14 +191,20 @@ const MenuScreen = ({ route }) => {
         )}
       />
       <ConfirmationModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        orderDetails={{
-          restaurant: restaurant || {},
-          products: products || [],
-          orderItems: orderItems || [],
-        }}
-      />
+  modalVisible={modalVisible}
+  setModalVisible={setModalVisible}
+  orderDetails={{
+    restaurant: restaurant || {},
+    products: products.length > 0 ? products : [],
+    orderItems: products.filter((item) => item.quantity > 0),
+  }}
+/>
+
+
+
+
+
+
     </View>
   );
 };
