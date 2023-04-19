@@ -157,10 +157,15 @@ const MenuScreen = ({ route }) => {
         )}
       />
       <ConfirmationModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        orderDetails={{ restaurant, products, orderItems }}
-      />
+  modalVisible={modalVisible}
+  setModalVisible={setModalVisible}
+  orderDetails={{
+    restaurant: restaurant || {},
+    products: products || [],
+    orderItems: orderItems || [],
+  }}
+/>
+
     </View>
   );
 };

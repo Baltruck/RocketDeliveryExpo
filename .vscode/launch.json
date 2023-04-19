@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug iOS",
+        "cwd": "${workspaceRoot}",
+        "type": "reactnative",
+        "request": "launch",
+        "platform": "ios",
+        "sourceMaps": true,
+        "outDir": "${workspaceRoot}/.vscode/.react"
+      },
+      {
+        "name": "Debug Android",
+        "cwd": "${workspaceRoot}",
+        "type": "reactnative",
+        "request": "launch",
+        "platform": "android",
+        "sourceMaps": true,
+        "outDir": "${workspaceRoot}/.vscode/.react"
+      },
+      {
+        "name": "Attach to packager",
+        "cwd": "${workspaceRoot}",
+        "type": "reactnative",
+        "request": "attach",
+        "address": "localhost",
+        "port": 19001,
+        "sourceMaps": true,
+        "outDir": "${workspaceRoot}/.vscode/.react"
+      }
+    ]
+  }
