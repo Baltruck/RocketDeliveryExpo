@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Dimensions,
 } from "react-native";
 import { FontAwesome as Icon } from "@expo/vector-icons";
 import { Card } from "react-native-elements";
@@ -15,6 +16,8 @@ import Constants from "expo-constants";
 import ConfirmationModal from "../components/ConfirmationModal";
 import menuImage from "../../assets/Images/RestaurantMenu.jpg";
 import { useRoute } from "@react-navigation/native";
+
+const screenWidth = Dimensions.get("window").width;
 
 // const route = useRoute();
 
@@ -44,25 +47,31 @@ const MenuScreen = ({ route }) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        setProducts(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        // set quantity to zero for each product
+        const productsWithQuantity = data.map((product) => ({
+            ...product,
+            quantity: 0,
+          }));
+          setProducts(productsWithQuantity);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
   }, [restaurantId]);
 
   useEffect(() => {
-    // Update order button disabled state based on orderItems array
-    const orderButtonDisabledState = orderItems.every(
+    // Update order button disabled state based on products array
+    const orderButtonDisabledState = products.every(
       (item) => item.quantity === 0
     );
     setOrderButtonDisabled(orderButtonDisabledState);
-  }, [orderItems]);
+  }, [products]);
+  
 
   const handleQuantityChange = (productId, newQuantity) => {
-    // Update orderItems array based on quantity change
-    const updatedOrderItems = orderItems.map((item) => {
-      if (item.productId === productId) {
+    // Update products array based on quantity change
+    const updatedProducts = products.map((item) => {
+      if (item.id === productId) {
         return {
           ...item,
           quantity: newQuantity,
@@ -71,8 +80,9 @@ const MenuScreen = ({ route }) => {
         return item;
       }
     });
-    setOrderItems(updatedOrderItems);
+    setProducts(updatedProducts);
   };
+  
 
   const handleOrderButtonPress = () => {
     // Check if any item has a quantity greater than zero
@@ -85,26 +95,30 @@ const MenuScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-    <View style={styles.header}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>RESTAURANT MENU</Text>
-        {restaurant ? <Text style={styles.restaurantName}>{restaurant.name}</Text> : null}
-        <View style={styles.ratingPriceContainer}>
-          {restaurant && (
-            <View style={styles.priceContainer}>
-              <Text style={styles.priceText}>Price: </Text>
-              <Text style={styles.priceText}>{"$".repeat(restaurant.price_range)}</Text>
+      <View style={styles.header}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>RESTAURANT MENU</Text>
+          {restaurant ? (
+            <Text style={styles.restaurantName}>{restaurant.name}</Text>
+          ) : null}
+          <View style={styles.ratingPriceContainer}>
+            {restaurant && (
+              <View style={styles.priceContainer}>
+                <Text style={styles.priceText}>Price: </Text>
+                <Text style={styles.priceText}>
+                  {"$".repeat(restaurant.price_range)}
+                </Text>
+              </View>
+            )}
+            <View style={styles.starsContainer}>
+              <Text style={styles.ratingText}>Rating: </Text>
+              {restaurant &&
+                [...Array(parseInt(restaurant.restaurant_rating))].map(
+                  (e, i) => <Icon key={i} name="star" style={styles.starIcon} />
+                )}
             </View>
-          )}
-          <View style={styles.starsContainer}>
-            <Text style={styles.ratingText}>Rating: </Text>
-            {restaurant &&
-              [...Array(parseInt(restaurant.restaurant_rating))].map(
-                (e, i) => <Icon key={i} name="star" style={styles.starIcon} />
-              )}
           </View>
         </View>
-      </View>
 
         <TouchableOpacity
           style={
@@ -127,8 +141,18 @@ const MenuScreen = ({ route }) => {
 
             <View style={styles.itemTextContainer}>
               <Text style={styles.itemTitle}>{item.name}</Text>
-              <Text style={styles.itemPrice}>{item.price} $</Text>
-              <Text style={styles.itemDescription}>{item.description}</Text>
+              <Text style={styles.itemPrice}>
+                {(item.cost / 100).toFixed(2)} $
+              </Text>
+              <Text
+                style={styles.itemDescription}
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              >
+                {item.description
+                  ? item.description
+                  : "Lorem ipsum dolor sit amet"}
+              </Text>
             </View>
             <View style={styles.itemCounterContainer}>
               <TouchableOpacity
@@ -256,6 +280,7 @@ const styles = StyleSheet.create({
   itemDescription: {
     fontSize: 14,
     color: "#888",
+    width: screenWidth * 0.4,
   },
   itemCounterContainer: {
     flexDirection: "row",
