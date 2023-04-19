@@ -71,20 +71,18 @@ const MenuScreen = ({ route }) => {
   
 
   const handleQuantityChange = (productId, newQuantity) => {
-    const itemsInOrder = products.filter((item) => item.quantity > 0);
-    // Update products array based on quantity change
-    const updatedProducts = products.map((item) => {
-      if (item.id === productId) {
-        return {
-          ...item,
-          quantity: newQuantity,
-        };
-      } else {
-        return item;
-      }
-    });
-    setProducts(updatedProducts);
-  };
+  if (newQuantity < 0) return;
+
+  const updatedProducts = products.map((product) => {
+    if (product.id === productId) {
+      return { ...product, quantity: newQuantity };
+    }
+    return product;
+  });
+
+  setProducts(updatedProducts);
+};
+
   
 
   const handleOrderButtonPress = () => {
@@ -193,12 +191,9 @@ const MenuScreen = ({ route }) => {
       <ConfirmationModal
   modalVisible={modalVisible}
   setModalVisible={setModalVisible}
-  orderDetails={{
-    restaurant: restaurant || {},
-    products: products.length > 0 ? products : [],
-    orderItems: products.filter((item) => item.quantity > 0),
-  }}
+  orderDetails={{ restaurant, products }}
 />
+
 
 
 

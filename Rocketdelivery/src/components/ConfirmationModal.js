@@ -47,21 +47,14 @@ const { restaurant, products } = orderDetails;
   
             {products
   .filter((item) => item.quantity > 0)
-  .map((item) => {
-    const product = item;
-    if (!product) {
-      console.warn(`Product with ID ${item.id} not found in products list.`);
-      return null;
-    }
-    return (
-      <View key={item.id} style={styles.itemContainer}>
-        <Text style={styles.itemText}>
-          {product.name} x {item.quantity} - $
-          {((product.cost * item.quantity) / 100).toFixed(2)}
-        </Text>
-      </View>
-    );
-  })}
+  .map((item) => (
+    <View key={item.id} style={styles.itemContainer}>
+      <Text style={styles.itemText}>
+        {item.name} x {item.quantity} - $
+        {((item.cost * item.quantity) / 100).toFixed(2)}
+      </Text>
+    </View>
+))}
 
   
             <View style={styles.lineSeparator} />
