@@ -29,13 +29,14 @@ const MenuScreen = ({ route }) => {
   useEffect(() => {
     // Fetch restaurant data from database
     fetch(`https://2ee4-74-50-186-92.ngrok-free.app/api/restaurants`)
-        .then((response) => response.json())
-        .then((data) => {
-            const info = data.find((item) => item.id === restaurantId);
-            setRestaurant(info);
-        })
-        .catch(error => console.error(`error retriving restaurant data:`, error));
-
+      .then((response) => response.json())
+      .then((data) => {
+        const info = data.find((item) => item.id === restaurantId);
+        setRestaurant(info);
+      })
+      .catch((error) =>
+        console.error(`error retriving restaurant data:`, error)
+      );
 
     // Fetch products data from database
     fetch(
@@ -84,24 +85,26 @@ const MenuScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={styles.header}>
       <View style={styles.titleContainer}>
-  <Text style={styles.title}>RESTAURANT MENU</Text>
-  {restaurant ? <Text style={styles.restaurantName}>{restaurant.name}</Text> : null}
-  <View style={styles.ratingPriceContainer}>
-    <View style={styles.starsContainer}>
-      {restaurant &&
-        [...Array(parseInt(restaurant.restaurant_rating))].map(
-          (e, i) => <Icon key={i} name="star" style={styles.starIcon} />
-        )}
-    </View>
-    {restaurant && (
-      <Text style={styles.priceText}>
-        {"$".repeat(restaurant.price_range)}
-      </Text>
-    )}
-  </View>
-</View>
+        <Text style={styles.title}>RESTAURANT MENU</Text>
+        {restaurant ? <Text style={styles.restaurantName}>{restaurant.name}</Text> : null}
+        <View style={styles.ratingPriceContainer}>
+          {restaurant && (
+            <View style={styles.priceContainer}>
+              <Text style={styles.priceText}>Price: </Text>
+              <Text style={styles.priceText}>{"$".repeat(restaurant.price_range)}</Text>
+            </View>
+          )}
+          <View style={styles.starsContainer}>
+            <Text style={styles.ratingText}>Rating: </Text>
+            {restaurant &&
+              [...Array(parseInt(restaurant.restaurant_rating))].map(
+                (e, i) => <Icon key={i} name="star" style={styles.starIcon} />
+              )}
+          </View>
+        </View>
+      </View>
 
         <TouchableOpacity
           style={
@@ -157,15 +160,14 @@ const MenuScreen = ({ route }) => {
         )}
       />
       <ConfirmationModal
-  modalVisible={modalVisible}
-  setModalVisible={setModalVisible}
-  orderDetails={{
-    restaurant: restaurant || {},
-    products: products || [],
-    orderItems: orderItems || [],
-  }}
-/>
-
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        orderDetails={{
+          restaurant: restaurant || {},
+          products: products || [],
+          orderItems: orderItems || [],
+        }}
+      />
     </View>
   );
 };
@@ -193,9 +195,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   ratingPriceContainer: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+  },
+  priceContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
   },
   starsContainer: {
     flexDirection: "row",
@@ -204,10 +210,6 @@ const styles = StyleSheet.create({
   starIcon: {
     color: "#ffcc00",
     marginRight: 2,
-  },
-  priceText: {
-    fontSize: 20,
-    fontWeight: "bold",
   },
   createOrderButton: {
     backgroundColor: "#e67e22",
@@ -280,6 +282,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginHorizontal: 5,
+  },
+  ratingText: {
+    fontSize: 15,
+    // fontWeight: "bold",
+  },
+  priceText: {
+    fontSize: 15,
+    // fontWeight: "bold",
   },
 });
 
