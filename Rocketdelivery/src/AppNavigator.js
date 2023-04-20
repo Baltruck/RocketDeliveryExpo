@@ -90,7 +90,7 @@ function AppNavigator() {
     headerLeft: () => (
       <Image
         source={require('../assets/Images/AppLogoV1.png')}
-        style={{ width: imageWidth, height: imageHeight, marginLeft: 10 }}
+        style={{ width: imageWidth, height: imageHeight, marginLeft: 20, marginBottom: 10 }}
   resizeMode="contain"
 />
     ),
