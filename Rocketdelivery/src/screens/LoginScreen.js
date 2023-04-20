@@ -40,7 +40,9 @@ const LoginScreen = () => {
         storeData('user_id', data.user_id.toString());
         storeData('customer_id', data.customer_id.toString());
 
-        navigation.navigate('Restaurants');
+        // navigation.navigate('Restaurants');
+        navigation.navigate('Home', { screen: 'Restaurants' });
+
       } else {
         setError('Invalid email or password');
       }
@@ -69,7 +71,7 @@ const LoginScreen = () => {
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <Button title="LOG IN" onPress={handleLogin} />
-      <Button title="Cancel" onPress={() => navigation.goBack()} />
+      {/* <Button title="Cancel" onPress={() => navigation.goBack()} /> */}
     </View>
   );
 };

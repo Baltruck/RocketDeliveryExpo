@@ -10,6 +10,7 @@ import globalStyles from './globalStyles';
 import LoginScreen from './screens/LoginScreen';
 import RestaurantsScreen from './screens/RestaurantsScreen';
 import MenuScreen from './screens/MenuScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -18,33 +19,42 @@ const imageWidth = screenWidth * 0.4;
 const aspectRatio = 163 / 594;
 const imageHeight = imageWidth * aspectRatio;
 
+const handleLogout = (navigation) => {
+  AsyncStorage.multiRemove(['user_id', 'customer_id'])
+    .then(() => {
+      navigation.navigate('Login');
+    })
+    .catch((error) => {
+      console.error('Error clearing AsyncStorage:', error);
+    });
+};
+
 const ScreenWrapper = ({ children }) => (
   <View style={styles.container}>
-    <ScrollView contentContainerStyle={styles.scrollView}>
       {children}
-    </ScrollView>
   </View>
 );
 
-function handleLogout() {
-  // put your logout logic here
-}
 
-function Home(props) {
-  return (
-    <ScreenWrapper>
-      <HomeScreen {...props} />
-    </ScreenWrapper>
-  );
-}
+// function handleLogout() {
+//   // put your logout logic here
+// }
 
-function Details(props) {
-  return (
-    <ScreenWrapper>
-      <DetailsScreen {...props} />
-    </ScreenWrapper>
-  );
-}
+// function Home(props) {
+//   return (
+//     <ScreenWrapper>
+//       <HomeScreen {...props} />
+//     </ScreenWrapper>
+//   );
+// }
+
+// function Details(props) {
+//   return (
+//     <ScreenWrapper>
+//       <DetailsScreen {...props} />
+//     </ScreenWrapper>
+//   );
+// }
 
 function Restaurants(props) {
   return (
@@ -65,9 +75,14 @@ function Menu(props) {
 function TabNavigator() {
   return (
     <Tab.Navigator tabBar={(props) => <Footer {...props} />}>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Restaurants" component={Restaurants} />
-      <Tab.Screen name="Menu" component={Menu} />
+      {/* <Tab.Screen name="Home" component={Home} /> */}
+      <Tab.Screen
+        name="Restaurants"
+        component={Restaurants}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
+      {/* <Tab.Screen name="Détails" component={Details} /> */}
     </Tab.Navigator>
   );
 }
@@ -75,6 +90,7 @@ function TabNavigator() {
 function AppNavigator() {
   return (
     <Stack.Navigator
+      initialRouteName="Login"
       screenOptions={{
         headerTitleStyle: globalStyles.title,
         headerStyle: {
@@ -82,28 +98,33 @@ function AppNavigator() {
         },
       }}
     >
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
       <Stack.Screen
-  name="Home"
-  component={Home}
-  options={{
-    headerTitle: () => null, // Deleted the title
-    headerLeft: () => (
-      <Image
-        source={require('../assets/Images/AppLogoV1.png')}
-        style={{ width: imageWidth, height: imageHeight, marginLeft: 20, marginBottom: 10 }}
-  resizeMode="contain"
-/>
-    ),
-    headerRight: () => (
-      <TouchableOpacity onPress={handleLogout}>
-        <Text style={globalStyles.headerButton}>LOG OUT</Text>
-      </TouchableOpacity>
-    ),
-  }}
-/>
-
-      <Stack.Screen name="Détails" component={Details} />
-      <Stack.Screen name="Login" component={LoginScreen} />
+        name="Home"
+        component={TabNavigator}
+        options={({ navigation, route }) => ({
+          headerTitle: () => null,
+          headerLeft: () => (
+            <Image
+              source={require('../assets/Images/AppLogoV1.png')}
+              style={{
+                width: imageWidth,
+                height: imageHeight,
+                marginLeft: 20,
+                marginBottom: 10,
+              }}
+              resizeMode="contain"
+            />
+          ),
+          headerRight: () => (
+            <TouchableOpacity onPress={() => {
+              handleLogout(navigation);
+            }}>
+              <Text style={globalStyles.headerButton}>LOG OUT</Text>
+            </TouchableOpacity>
+          ),
+        })}
+      />
     </Stack.Navigator>
   );
 }
@@ -119,3 +140,4 @@ const styles = StyleSheet.create({
 });
 
 export default AppNavigator;
+
