@@ -53,9 +53,9 @@ const handleConfirmOrder = async () => {
         products: products
           .filter((item) => item.quantity > 0)
           .map((item) => ({
-            product_id: item.id,
-            product_quantity: item.quantity,
-            product_unit_cost: item.cost,
+            id: item.id,
+            quantity: item.quantity,
+            cost: item.cost,
           })),
       };
 
