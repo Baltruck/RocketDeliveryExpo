@@ -71,10 +71,12 @@ const MenuScreen = ({ route }) => {
   
 
   const handleQuantityChange = (productId, newQuantity) => {
+  console.log('productId', productId);
   if (newQuantity < 0) return;
 
   const updatedProducts = products.map((product) => {
     if (product.id === productId) {
+      console.log('productId2', productId);
       return { ...product, quantity: newQuantity };
     }
     return product;

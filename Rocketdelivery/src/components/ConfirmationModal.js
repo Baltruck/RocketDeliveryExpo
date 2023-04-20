@@ -23,7 +23,8 @@ const { restaurant, products } = orderDetails;
   .filter((item) => item.quantity > 0)
   .reduce((total, item) => {
     const product = products.find((p) => p.id === item.productId);
-    console.log('product', product);
+    // console.log('productIdmodal', productId);
+    console.log('productmodal', product);
 
     if (!product) {
       console.warn(`Product with ID ${item.productId} not found in products list.`);
