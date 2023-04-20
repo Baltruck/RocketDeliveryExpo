@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import { Modal, Text, TouchableOpacity, View, StyleSheet, ActivityIndicator } from "react-native";
 
@@ -36,15 +38,26 @@ const handleConfirmOrder = async () => {
     setOrderStatus("processing");
 
     try {
+        // Get the customer ID from local storage
+        const customerId = await AsyncStorage.getItem("customerId");
+
+        if (!customerId) {
+            console.error("Customer ID not found in local storage");
+            setOrderStatus("failure");
+            return;
+          }
+
       // Exemple of data to send to the API
       const data = {
         restaurant_id: restaurant.id,
-        // customer_id: <customer_id from local storage>,
-        products: products.filter((item) => item.quantity > 0).map((item) => ({
-          product_id: item.id,
-          product_quantity: item.quantity,
-          product_unit_cost: item.cost,
-        })),
+        customer_id: customerId,
+        products: products
+          .filter((item) => item.quantity > 0)
+          .map((item) => ({
+            product_id: item.id,
+            product_quantity: item.quantity,
+            product_unit_cost: item.cost,
+          })),
       };
 
       // POST request to the API
