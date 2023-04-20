@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
       resizeMode: "cover",
     },
     cardTitle: {
-      fontSize: 18,
+      fontSize: 14,
       fontWeight: "bold",
       margin: 10,
     },
@@ -257,8 +257,9 @@ const styles = StyleSheet.create({
       marginLeft: 10,
     },
     starIcon: {
-      color: "#ffcc00",
+      color: "#000000",
       marginRight: 2,
+      fontSize: 10,
     },
     cardsContainer: {
         flexDirection: "row",
