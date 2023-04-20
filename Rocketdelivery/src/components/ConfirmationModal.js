@@ -17,6 +17,11 @@ const { restaurant, products } = orderDetails;
     console.log("Products are undefined");
     return null;
   }
+
+    //function to handle closing the modal
+    const handleCloseModal = () => {
+        setModalVisible(false);
+      };
   
    // Calculate the total cost
 const totalCost = products
@@ -133,6 +138,12 @@ const handleConfirmOrder = async () => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
+        <TouchableOpacity
+            style={styles.closeButton}
+            onPress={handleCloseModal}
+          >
+            <FontAwesome name="times" size={24} color="black" />
+          </TouchableOpacity>
           <Text style={styles.modalTitle}>Order Confirmation</Text>
           <Text style={styles.orderSummary}>Order Summary</Text>
 
@@ -266,6 +277,11 @@ const handleConfirmOrder = async () => {
         fontWeight: "bold",
         fontSize: 16,
         marginLeft: 5,
+      },
+      closeButton: {
+        position: "absolute",
+        top: 10,
+        right: 10,
       },
   });
   
