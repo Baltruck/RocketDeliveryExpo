@@ -232,9 +232,9 @@ const styles = StyleSheet.create({
       color: "#fff",
     },
     card: {
-      width: "41%",
+      width: screenWidth * 0.39,
       marginBottom: 20,
-      borderRadius: 10,
+      borderRadius: 7,
       overflow: "hidden",
       paddingHorizontal: 0,
       paddingVertical: 0,
@@ -263,8 +263,8 @@ const styles = StyleSheet.create({
     cardsContainer: {
         flexDirection: "row",
         flexWrap: "wrap",
-        justifyContent: "space-between",
-        padding: 10,
+        justifyContent: "space-evenly",
+        padding: 0,
       },
       scrollMenuStyle: {
         display: "flex",
