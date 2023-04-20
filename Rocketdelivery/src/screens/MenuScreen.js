@@ -229,6 +229,7 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     fontSize: 20,
+    marginBottom: 20,
   },
   restaurantName: {
     fontWeight: "bold",
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   starIcon: {
-    color: "#ffcc00",
+    color: "#000000",
     marginRight: 2,
   },
   createOrderButton: {
@@ -270,8 +271,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 10,
     marginVertical: 5,
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1,
+    // borderBottomColor: "#ccc",
+    // borderBottomWidth: 1,
     paddingBottom: 10,
   },
   itemImage: {
@@ -286,16 +287,17 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontWeight: "bold",
     fontSize: 16,
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   itemPrice: {
+    fontWeight: "bold",
     fontSize: 14,
-    color: "#888",
-    marginBottom: 5,
+    color: "#222126",
+    // marginBottom: 5,
   },
   itemDescription: {
-    fontSize: 14,
-    color: "#888",
+    fontSize: 12,
+    color: "#222126",
     width: screenWidth * 0.4,
   },
   itemCounterContainer: {
@@ -303,18 +305,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   itemCounterButton: {
-    backgroundColor: "#e67e22",
-    borderRadius: 10,
+    backgroundColor: "#222126",
+    width: 30, 
+    height: 30, 
+    borderRadius: 15, 
     padding: 5,
-    marginHorizontal: 5,
+    marginHorizontal: 15,
+    justifyContent: "center", 
+    alignItems: "center", 
   },
   itemCounterButtonDisabled: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#222126",
   },
   itemCounterButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold",
+    bottom: 5,
   },
   itemCounterButtonTextDisabled: {
     color: "#aaa",
