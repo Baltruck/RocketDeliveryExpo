@@ -167,9 +167,12 @@ const MenuScreen = ({ route }) => {
                   styles.itemCounterButton,
                   item.quantity === 0 && styles.itemCounterButtonDisabled,
                 ]}
-                onPress={() => handleQuantityChange(item.id, item.quantity - 1)}
-                disabled={item.quantity === 0}
-              >
+                onPress={() => {
+                    console.log('Minus button pressed:', item.id);
+                    handleQuantityChange(item.id, item.quantity - 1);
+                  }}
+                  disabled={item.quantity === 0}
+                >
                 <Text
                   style={[
                     styles.itemCounterButtonText,
@@ -182,9 +185,11 @@ const MenuScreen = ({ route }) => {
               <Text style={styles.itemCounterText}>{item.quantity}</Text>
               <TouchableOpacity
                 style={styles.itemCounterButton}
-                onPress={() => handleQuantityChange(item.id, item.quantity + 1)}
-
-              >
+                onPress={() => {
+                    console.log('Plus button pressed:', item.id);
+                    handleQuantityChange(item.id, item.quantity + 1);
+                  }}
+                >
                 <Text style={styles.itemCounterButtonText}>+</Text>
               </TouchableOpacity>
             </View>

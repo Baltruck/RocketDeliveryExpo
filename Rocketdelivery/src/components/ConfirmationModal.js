@@ -3,6 +3,7 @@ import { Modal, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 
 const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
     console.log("Order details:", orderDetails);
+    console.log("Products in ConfirmationModal:", orderDetails.products);
     // const { restaurant, products, orderItems } = orderDetails;
   
    // Check if products and orderItems are defined, if not return null
@@ -19,19 +20,17 @@ const { restaurant, products } = orderDetails;
   }
   
     // Calculate the total cost
-    const totalCost = products
-  .filter((item) => item.quantity > 0)
-  .reduce((total, item) => {
-    const product = products.find((p) => p.id === item.productId);
-    // console.log('productIdmodal', productId);
-    console.log('productmodal', product);
+   // Calculate the total cost
+const totalCost = products
+.filter((item) => item.quantity > 0)
+.reduce((total, item) => {
+  if (!item) {
+    console.warn(`Product with ID ${item.id} not found in products list.`);
+    return total;
+  }
+  return total + item.cost * item.quantity;
+}, 0);
 
-    if (!product) {
-      console.warn(`Product with ID ${item.productId} not found in products list.`);
-      return total;
-    }
-    return total + product.cost * item.quantity;
-  }, 0);
 
   
     return (
@@ -53,11 +52,11 @@ const { restaurant, products } = orderDetails;
   .map((item) => (
     <View key={item.id} style={styles.itemContainer}>
       <Text style={styles.itemText}>
-        {item.name} x {item.quantity} - $
-        {((item.cost * item.quantity) / 100).toFixed(2)}
+        {item.name} x {item.quantity} - ${((item.cost * item.quantity) / 100).toFixed(2)}
       </Text>
     </View>
 ))}
+
 
   
             <View style={styles.lineSeparator} />
