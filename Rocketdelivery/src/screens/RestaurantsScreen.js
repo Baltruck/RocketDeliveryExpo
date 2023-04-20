@@ -18,6 +18,17 @@ const RestaurantsScreen = () => {
   const [restaurantImages, setRestaurantImages] = useState([]);
   
 
+// Create a function to render the price range component
+const renderPriceRange = (priceRange) => {
+    let priceSymbol = "";
+  
+    for (let i = 0; i < priceRange; i++) {
+      priceSymbol += "$";
+    }
+  
+    return <Text style={styles.priceRangeText}>({priceSymbol})</Text>;
+  };
+
 
 // send id to menu screen
 const navigation = useNavigation();
@@ -159,8 +170,11 @@ const localImages = [
                 }
                 style={styles.cardImage}
               />
-
-              <Text style={styles.cardTitle}>{restaurant.name}</Text>
+{/* Modify the restaurant name and price range rendering */}
+<View style={styles.restaurantNameContainer}>
+                  <Text style={styles.cardTitle}>{restaurant.name}</Text>
+                  {renderPriceRange(restaurant.price_range)}
+                </View>
               <View style={styles.cardStars}>
               {[...Array(parseInt(restaurant.restaurant_rating))].map((e, i) => (
                   <Icon key={i} name="star" style={styles.starIcon} />
@@ -249,7 +263,10 @@ const styles = StyleSheet.create({
     cardTitle: {
       fontSize: 14,
       fontWeight: "bold",
-      margin: 10,
+    //   margin: 10,
+        marginTop: 10,
+        marginBottom: 10,
+        // marginRight: 10,
     },
     cardStars: {
       flexDirection: "row",
@@ -277,6 +294,18 @@ const styles = StyleSheet.create({
         height: 40,
         alignItems: "center",
     },
+    restaurantNameContainer: {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        paddingHorizontal: 10,
+      },
+      
+      priceRangeText: {
+        fontSize: 14,
+        fontWeight: "bold",
+        marginLeft: 4,
+      },
   });
   
 
