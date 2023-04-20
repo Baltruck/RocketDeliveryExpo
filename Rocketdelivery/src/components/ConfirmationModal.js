@@ -129,34 +129,40 @@ const handleConfirmOrder = async () => {
   
   return (
     <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={() => {
-        setModalVisible(false);
-      }}
-    >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-        <TouchableOpacity
-            style={styles.closeButton}
-            onPress={handleCloseModal}
-          >
-            <FontAwesome name="times" size={24} color="black" />
-          </TouchableOpacity>
+    animationType="slide"
+    transparent={true}
+    visible={modalVisible}
+    onRequestClose={() => {
+      setModalVisible(false);
+    }}
+  >
+    <View style={styles.centeredView}>
+      <View style={styles.modalView}>
+        <View style={styles.header}>
           <Text style={styles.modalTitle}>Order Confirmation</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={handleCloseModal}
+        >
+          <FontAwesome name="times" size={24} color="white" />
+        </TouchableOpacity>
+          {/* <Text style={styles.modalTitle}>Order Confirmation</Text> */}
           <Text style={styles.orderSummary}>Order Summary</Text>
 
           {products
-    .filter((item) => item.quantity > 0)
-    .map((item) => (
-      <View key={item.id} style={styles.itemContainer}>
-        <Text style={styles.itemText}>
-          {item.name} x {item.quantity} - $
-          {((item.cost * item.quantity) / 100).toFixed(2)}
-        </Text>
-      </View>
-  ))}
+  .filter((item) => item.quantity > 0)
+  .map((item) => (
+    <View key={item.id} style={styles.itemContainer}>
+      <Text style={styles.itemName}>{item.name}</Text>
+      <Text style={styles.itemQuantity}>
+        x {item.quantity}
+      </Text>
+      <Text style={styles.itemPrice}>
+        ${(item.cost * item.quantity / 100).toFixed(2)}
+      </Text>
+    </View>
+))}
 
           <View style={styles.lineSeparator} />
 
@@ -188,25 +194,54 @@ const handleConfirmOrder = async () => {
       alignItems: "center",
       width: "90%",
     },
-    modalTitle: {
-      fontSize: 18,
-      fontWeight: "bold",
-      marginBottom: 10,
-    },
+    header: {
+        backgroundColor: "#222126",
+        borderTopLeftRadius: 7,
+        borderTopRightRadius: 10,
+        padding: 10,
+        paddingBottom: 20,
+        width: "108%",
+        // alignItems: "center",
+        top: -10,
+      },
+      modalTitle: {
+        fontSize: 18,
+        color: "white",
+        fontFamily: 'Oswald-Regular',
+        fontSize: 20,
+        marginLeft: 10,
+      },
     orderSummary: {
       fontSize: 16,
-      fontWeight: "bold",
+    //   fontWeight: "bold",
       alignSelf: "flex-start",
       marginBottom: 10,
+      fontFamily: 'Oswald-Regular',
+      fontSize: 20,
     },
     itemContainer: {
-      flexDirection: "row",
-      justifyContent: "flex-start",
-      alignItems: "center",
-      marginBottom: 5,
-    },
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 5,
+      },
+      itemName: {
+        flex: 1,
+        textAlign: "left",
+        fontSize: 14,
+      },
+      itemQuantity: {
+        flex: 1,
+        textAlign: "center",
+        fontSize: 14,
+      },
+      itemPrice: {
+        flex: 1,
+        textAlign: "right",
+        fontSize: 14,
+      },
     itemText: {
-      fontSize: 14,
+      fontSize: 16,
     },
     lineSeparator: {
       borderBottomWidth: 1,
@@ -226,7 +261,7 @@ const handleConfirmOrder = async () => {
       fontWeight: "bold",
     },
     confirmOrderButton: {
-      backgroundColor: "#e67e22",
+      backgroundColor: "#DA583B",
       borderRadius: 5,
       padding: 10,
       alignItems: "center",
@@ -280,8 +315,8 @@ const handleConfirmOrder = async () => {
       },
       closeButton: {
         position: "absolute",
-        top: 10,
-        right: 10,
+        top: 25,
+        right: 25,
       },
   });
   
