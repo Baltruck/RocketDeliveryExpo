@@ -18,7 +18,6 @@ const { restaurant, products } = orderDetails;
     return null;
   }
   
-    // Calculate the total cost
    // Calculate the total cost
 const totalCost = products
 .filter((item) => item.quantity > 0)
@@ -39,7 +38,7 @@ const handleConfirmOrder = async () => {
 
     try {
         // Get the customer ID from local storage
-        const customerId = await AsyncStorage.getItem("customerId");
+        const customerId = await AsyncStorage.getItem("customer_id");
 
         if (!customerId) {
             console.error("Customer ID not found in local storage");

@@ -3,6 +3,15 @@ import { View, TextInput, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native';
 import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const storeData = async (key, value) => {
+  try {
+    await AsyncStorage.setItem(key, value);
+  } catch (error) {
+    console.error(`Error saving ${key} to AsyncStorage:`, error);
+  }
+};
 
 const LoginScreen = () => {
   const [email, setEmail] = React.useState('');
@@ -15,7 +24,6 @@ const LoginScreen = () => {
     // Change for the new ngrok redirect url
     // fetch('https://208d-74-50-186-92.ngrok-free.app/api/login', {
       fetch(`${redirApi}api/login`, {
-      // fetch('http://localhost:3000/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -28,6 +36,10 @@ const LoginScreen = () => {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
+        // Stock the user_id, customer_id in local storage
+        storeData('user_id', data.user_id.toString());
+        storeData('customer_id', data.customer_id.toString());
+
         navigation.navigate('Restaurants');
       } else {
         setError('Invalid email or password');
