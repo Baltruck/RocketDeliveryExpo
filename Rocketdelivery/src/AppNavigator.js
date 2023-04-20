@@ -117,10 +117,10 @@ function AppNavigator() {
             />
           ),
           headerRight: () => (
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity style={styles.logoutButton} onPress={() => {
               handleLogout(navigation);
             }}>
-              <Text style={globalStyles.headerButton}>LOG OUT</Text>
+              <Text style={styles.logoutButtonText}>LOG OUT</Text>
             </TouchableOpacity>
           ),
         })}
@@ -136,6 +136,22 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flexGrow: 1,
+  },
+  logoutButton: {
+    backgroundColor: '#DA583B',
+    color: '#ffffff',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 7,
+    marginRight: 20,
+    marginBottom: 10,
+  },
+  logoutButtonText: {
+    color: '#ffffff',
+    fontSize: 15,
+    paddingTop: 5,
+    padding: 5,
+    fontFamily: 'Oswald-Regular',
   },
 });
 
