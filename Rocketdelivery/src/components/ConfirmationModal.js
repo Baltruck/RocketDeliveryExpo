@@ -6,6 +6,7 @@ import { Modal, Text, TouchableOpacity, View, StyleSheet, ActivityIndicator } fr
 
 //add icon
 import { FontAwesome } from '@expo/vector-icons';
+ 
 
 const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
     console.log("Order details:", orderDetails);
@@ -75,6 +76,10 @@ const handleConfirmOrder = async () => {
 
       if (response.ok) {
         setOrderStatus("success");
+        setTimeout(() => {
+            resetModal();
+            setModalVisible(false);
+          }, 3000);
       } else {
         setOrderStatus("failure");
       }
@@ -82,6 +87,10 @@ const handleConfirmOrder = async () => {
       console.error("Error while sending order:", error);
       setOrderStatus("failure");
     }
+  };
+
+  const resetModal = () => {
+    setOrderStatus("pending");
   };
 
   // 2. Modify the renderOrderButton function to display the different states
@@ -295,7 +304,7 @@ const handleConfirmOrder = async () => {
         marginBottom: 20,
       },
       successMessageText: {
-        color: "green",
+        color: "#609475",
         fontWeight: "bold",
         fontSize: 16,
         marginLeft: 5,
@@ -308,7 +317,7 @@ const handleConfirmOrder = async () => {
         marginBottom: 20,
       },
       failureMessageText: {
-        color: "red",
+        color: "#851919",
         fontWeight: "bold",
         fontSize: 16,
         marginLeft: 5,
