@@ -1,16 +1,13 @@
-import React from "react";
-import { Modal, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import React, { useState } from "react";
+
+import { Modal, Text, TouchableOpacity, View, StyleSheet, ActivityIndicator } from "react-native";
+
+//add icon
+import { FontAwesome } from '@expo/vector-icons';
 
 const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
     console.log("Order details:", orderDetails);
     console.log("Products in ConfirmationModal:", orderDetails.products);
-    // const { restaurant, products, orderItems } = orderDetails;
-  
-   // Check if products and orderItems are defined, if not return null
-//   if (!products || !orderItems) {
-//     console.log("Products or orderItems are undefined");
-//     return null;
-//   }
 const { restaurant, products } = orderDetails;
   
   // Check if products are defined, if not return null
@@ -31,57 +28,128 @@ const totalCost = products
   return total + item.cost * item.quantity;
 }, 0);
 
+//new
+const [orderStatus, setOrderStatus] = useState("pending");
 
-  
-    return (
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>Order Confirmation</Text>
-            <Text style={styles.orderSummary}>Order Summary</Text>
-  
-            {products
-  .filter((item) => item.quantity > 0)
-  .map((item) => (
-    <View key={item.id} style={styles.itemContainer}>
-      <Text style={styles.itemText}>
-        {item.name} x {item.quantity} - ${((item.cost * item.quantity) / 100).toFixed(2)}
-      </Text>
-    </View>
-))}
+// Function to handle the order confirmation
+const handleConfirmOrder = async () => {
+    setOrderStatus("processing");
 
+    try {
+      // Exemple of data to send to the API
+      const data = {
+        restaurant_id: restaurant.id,
+        // customer_id: <customer_id from local storage>,
+        products: products.filter((item) => item.quantity > 0).map((item) => ({
+          product_id: item.id,
+          product_quantity: item.quantity,
+          product_unit_cost: item.cost,
+        })),
+      };
 
-  
-            <View style={styles.lineSeparator} />
-  
-            <View style={styles.totalContainer}>
-              <Text style={styles.totalText}>
-                TOTAL: $ {(totalCost / 100).toFixed(2)}
-              </Text>
-            </View>
-  
-            <TouchableOpacity
-              style={styles.confirmOrderButton}
-              onPress={() => {
-                setModalVisible(false);
-                // Perform any additional actions after confirming the order
-              }}
-            >
-              <Text style={styles.confirmOrderButtonText}>CONFIRM ORDER</Text>
-            </TouchableOpacity>
+      // POST request to the API
+      const response = await fetch("https://2ee4-74-50-186-92.ngrok-free.app/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setOrderStatus("success");
+      } else {
+        setOrderStatus("failure");
+      }
+    } catch (error) {
+      console.error("Error while sending order:", error);
+      setOrderStatus("failure");
+    }
+  };
+
+  // 2. Modify the renderOrderButton function to display the different states
+  const renderOrderButton = () => {
+    switch (orderStatus) {
+      case "processing":
+        return (
+          <View style={styles.processingOrderButton}>
+            <ActivityIndicator size="small" color="#fff" />
+            <Text style={styles.processingOrderButtonText}>
+              PROCESSING ORDER...
+            </Text>
           </View>
-        </View>
-      </Modal>
-    );
+        );
+      case "success":
+        return (
+          <View style={styles.successMessage}>
+            <FontAwesome name="check" size={24} color="green" />
+            <Text style={styles.successMessageText}>
+              Thanks you! Your order has been received.
+            </Text>
+          </View>
+        );
+      case "failure":
+        return (
+          <View style={styles.failureMessage}>
+            <FontAwesome name="times" size={24} color="red" />
+            <Text style={styles.failureMessageText}>
+              Your order was not processed successfully. Please try again.
+            </Text>
+          </View>
+        );
+      default:
+        return (
+          <TouchableOpacity
+            style={styles.confirmOrderButton}
+            onPress={handleConfirmOrder}
+            disabled={orderStatus === "processing"}
+          >
+            <Text style={styles.confirmOrderButtonText}>CONFIRM ORDER</Text>
+          </TouchableOpacity>
+        );
+    }
   };
   
+  return (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        setModalVisible(false);
+      }}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalTitle}>Order Confirmation</Text>
+          <Text style={styles.orderSummary}>Order Summary</Text>
+
+          {products
+    .filter((item) => item.quantity > 0)
+    .map((item) => (
+      <View key={item.id} style={styles.itemContainer}>
+        <Text style={styles.itemText}>
+          {item.name} x {item.quantity} - $
+          {((item.cost * item.quantity) / 100).toFixed(2)}
+        </Text>
+      </View>
+  ))}
+
+          <View style={styles.lineSeparator} />
+
+          <View style={styles.totalContainer}>
+            <Text style={styles.totalText}>
+              TOTAL: $ {(totalCost / 100).toFixed(2)}
+            </Text>
+          </View>
+
+          {/* Afficher le bouton de commande en fonction de l'état de la commande */}
+          {renderOrderButton()}
+        </View>
+      </View>
+    </Modal>
+  );
+};
 
   const styles = StyleSheet.create({
     centeredView: {
@@ -146,6 +214,47 @@ const totalCost = products
       fontWeight: "bold",
       fontSize: 16,
     },
+    processingOrderButton: {
+        backgroundColor: "#e67e22",
+        borderRadius: 5,
+        padding: 10,
+        alignItems: "center",
+        flexDirection: "row",
+        justifyContent: "center",
+        width: "100%",
+      },
+      processingOrderButtonText: {
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: 16,
+        marginLeft: 5,
+      },
+      successMessage: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        marginBottom: 20,
+      },
+      successMessageText: {
+        color: "green",
+        fontWeight: "bold",
+        fontSize: 16,
+        marginLeft: 5,
+      },
+      failureMessage: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        marginBottom: 20,
+      },
+      failureMessageText: {
+        color: "red",
+        fontWeight: "bold",
+        fontSize: 16,
+        marginLeft: 5,
+      },
   });
   
 
