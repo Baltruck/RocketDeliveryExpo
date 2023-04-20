@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity, View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet, ScrollView, Image, Dimensions } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Card } from "react-native-elements";
 import { FontAwesome as Icon } from "@expo/vector-icons";
@@ -9,11 +9,14 @@ import Constants from "expo-constants";
 import { useNavigation } from '@react-navigation/native';
 import MenuScreen from './MenuScreen';
 
+const screenWidth = Dimensions.get("window").width;
+
 const RestaurantsScreen = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [selectedRating, setSelectedRating] = useState("all");
   const [selectedPrice, setSelectedPrice] = useState("all");
   const [restaurantImages, setRestaurantImages] = useState([]);
+  
 
 
 // send id to menu screen
@@ -103,34 +106,42 @@ const localImages = [
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>NEARBY RESTAURANTS</Text>
-        <View style={styles.filterContainer}>
+      <Text style={[styles.headerText, globalStyles.title]}>NEARBY RESTAURANTS</Text>
+      <View style={styles.filterContainer}>
+      <View style={styles.pickerWrapper}>
           <Text style={styles.filterText}>Rating</Text>
+          <View style={styles.scrollMenuStyle}>
           <Picker
             selectedValue={selectedRating}
-            style={styles.filterPicker}
+            style={{ height: 50, width: 150, color: 'white', marginHorizontal: -4 }}
             onValueChange={(itemValue) => handleRatingChange(itemValue)}
           >
-            <Picker.Item label="All" value="all" />
+            <Picker.Item label="-- Select --"  value="all" />
             <Picker.Item label="1" value="1" />
             <Picker.Item label="2" value="2" />
             <Picker.Item label="3" value="3" />
             <Picker.Item label="4" value="4" />
             <Picker.Item label="5" value="5" />
           </Picker>
+          </View>
+        </View>
+        <View style={styles.pickerWrapper}>
           <Text style={styles.filterText}>Price</Text>
+          <View style={styles.scrollMenuStyle}>
           <Picker
             selectedValue={selectedPrice}
-            style={styles.filterPicker}
+            style={{ height: 50, width: 150, color: 'white', marginHorizontal: -4 }}
             onValueChange={(itemValue) => handlePriceChange(itemValue)}
           >
-            <Picker.Item label="All" value="all" />
+            <Picker.Item label="-- Select --" value="all" />
             <Picker.Item label="$" value="$" />
             <Picker.Item label="$$" value="$$" />
             <Picker.Item label="$$$" value="$$$" />
             <Picker.Item label="$$$$" value="$$$$" />
           </Picker>
+          </View>
         </View>
+      </View>
       </View>
       <Text style={styles.cardTitle}>RESTAURANTS</Text>
       <ScrollView contentContainerStyle={styles.cardsContainer}>
@@ -176,6 +187,14 @@ const styles = StyleSheet.create({
     headerText: {
       fontWeight: "bold",
       fontSize: 20,
+    //   width: screenWidth * 0.5,
+      transform: [
+        { scaleY: 1.2 }, 
+        { scaleX: 0.8 }, 
+      ],
+      marginLeft: -41,
+        marginTop: -15,
+        marginBottom: 40,
     },
     filterContainer: {
       flexDirection: "row",
@@ -183,14 +202,34 @@ const styles = StyleSheet.create({
       justifyContent: "space-between",
       marginTop: 10,
     },
+    pickerWrapper: {
+        width: "45%",
+      },
+    pickerContainer: {
+        flexDirection: "column",
+        alignItems: "flex-start",
+      },
+    filterItem: {
+        flexDirection: "column",
+        alignItems: "flex-start",
+      },
     filterText: {
-      fontSize: 16,
+      fontSize: 19,
       fontWeight: "bold",
-      marginRight: 10,
+      marginBottom: 5,
+      fontFamily: 'Oswald-Regular',
+      transform: [
+        { scaleY: 1.3 }, 
+        { scaleX: 0.8 }, 
+      ],
+      marginLeft: -17,
     },
     filterPicker: {
       flex: 1,
       height: 50,
+      backgroundColor: "#DA583B",
+      borderRadius: 20,
+      color: "#fff",
     },
     card: {
       width: "41%",
@@ -227,6 +266,16 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: 10,
       },
+      scrollMenuStyle: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#DA583B",
+        borderRadius: 7,
+        borderWidth: 0,
+        height: 40,
+        alignItems: "center",
+    },
   });
   
 
