@@ -126,7 +126,7 @@ const MenuScreen = ({ route }) => {
             </View>
           </View>
         </View>
-
+        <View style={styles.createOrderButtonWrapper}>
         <TouchableOpacity
           style={
             orderButtonDisabled
@@ -136,8 +136,10 @@ const MenuScreen = ({ route }) => {
           disabled={orderButtonDisabled}
           onPress={() => handleOrderButtonPress()}
         >
-          <Text style={styles.createOrderButtonText}>CREATE ORDER</Text>
+          <Text style={[styles.createOrderButtonText, globalStyles.title]}>Create Order</Text>
+
         </TouchableOpacity>
+        </View>
       </View>
       <FlatList
         data={products}
@@ -233,7 +235,7 @@ const styles = StyleSheet.create({
   },
   restaurantName: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
   },
   ratingPriceContainer: {
     flexDirection: "column",
@@ -252,18 +254,27 @@ const styles = StyleSheet.create({
     color: "#000000",
     marginRight: 2,
   },
+  createOrderButtonWrapper: {
+    position: 'absolute',
+    top: 70,
+    right: 20,
+  },
   createOrderButton: {
-    backgroundColor: "#e67e22",
-    borderRadius: 5,
-    padding: 10,
+    backgroundColor: "#DA583B",
+    borderRadius: 8,
+    paddingVertical: 7,
     alignItems: "center",
+    paddingHorizontal: 20,
   },
   createOrderButtonDisabled: {
     backgroundColor: "#ccc",
+    borderRadius: 8,
+    paddingVertical: 7,
+    alignItems: "center",
+    paddingHorizontal: 20,
   },
   createOrderButtonText: {
     color: "#fff",
-    fontWeight: "bold",
     fontSize: 16,
   },
   itemContainer: {
@@ -271,8 +282,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 10,
     marginVertical: 5,
-    // borderBottomColor: "#ccc",
-    // borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
     paddingBottom: 10,
   },
   itemImage: {
