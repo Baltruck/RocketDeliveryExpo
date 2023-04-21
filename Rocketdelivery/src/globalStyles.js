@@ -4,7 +4,6 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   title: {
     fontFamily: 'Oswald-Regular',
-    // fontSize: 24,
   },
   headerButton: {
     fontSize: 16,
