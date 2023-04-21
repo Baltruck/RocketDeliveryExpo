@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native';
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import redirApi from '../components/NgrokUrl';
 
 const storeData = async (key, value) => {
   try {
@@ -18,11 +19,8 @@ const LoginScreen = () => {
   const [password, setPassword] = React.useState('');
   const navigation = useNavigation();
   const [error, setError] = useState('');
-  const redirApi = 'https://2ee4-74-50-186-92.ngrok-free.app/';
 
   const handleLogin = () => {
-    // Change for the new ngrok redirect url
-    // fetch('https://208d-74-50-186-92.ngrok-free.app/api/login', {
       fetch(`${redirApi}api/login`, {
       method: 'POST',
       headers: {
@@ -58,7 +56,6 @@ const LoginScreen = () => {
         style={styles.input}
         placeholder="Enter your primary email here"
         value={email}
-        // value = "sheldon@casper-koepp.org"
         onChangeText={setEmail}
       />
       <TextInput
@@ -66,12 +63,10 @@ const LoginScreen = () => {
         placeholder="************"
         secureTextEntry
         value={password}
-        // value = "password"
         onChangeText={setPassword}
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <Button title="LOG IN" onPress={handleLogin} />
-      {/* <Button title="Cancel" onPress={() => navigation.goBack()} /> */}
     </View>
   );
 };
