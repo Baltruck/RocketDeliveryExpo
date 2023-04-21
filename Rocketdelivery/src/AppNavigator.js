@@ -65,7 +65,6 @@ function Menu(props) {
 function TabNavigator() {
   return (
     <Tab.Navigator tabBar={(props) => <Footer {...props} />}>
-      {/* <Tab.Screen name="Home" component={Home} /> */}
       <Tab.Screen
         name="Restaurants"
         component={Restaurants}
