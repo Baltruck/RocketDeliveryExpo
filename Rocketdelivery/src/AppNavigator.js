@@ -36,27 +36,6 @@ const ScreenWrapper = ({ children }) => (
   </View>
 );
 
-
-// function handleLogout() {
-//   // put your logout logic here
-// }
-
-// function Home(props) {
-//   return (
-//     <ScreenWrapper>
-//       <HomeScreen {...props} />
-//     </ScreenWrapper>
-//   );
-// }
-
-// function Details(props) {
-//   return (
-//     <ScreenWrapper>
-//       <DetailsScreen {...props} />
-//     </ScreenWrapper>
-//   );
-// }
-
 function Restaurants(props) {
   return (
     <ScreenWrapper>
@@ -65,6 +44,13 @@ function Restaurants(props) {
   );
 }
 
+function OrderHistoryScreen(props) {
+  return (
+    <ScreenWrapper>
+      <OrderHistory {...props} />
+    </ScreenWrapper>
+  );
+}
 
 function Menu(props) {
   return (
@@ -84,6 +70,11 @@ function TabNavigator() {
         options={{ headerShown: false }}
       />
       <Tab.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
+      <Tab.Screen
+        name="OrderHistory"
+        component={OrderHistoryScreen}
+        options={{ headerShown: false }}
+      />
       {/* <Tab.Screen name="Détails" component={Details} /> */}
     </Tab.Navigator>
   );
@@ -126,11 +117,6 @@ function AppNavigator() {
             </TouchableOpacity>
           ),
         })}
-      />
-      <Stack.Screen
-        name="OrderHistory"
-        component={OrderHistory}
-        options={{ headerShown: true, title: 'My Orders' }}
       />
     </Stack.Navigator>
 

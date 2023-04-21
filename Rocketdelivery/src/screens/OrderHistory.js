@@ -61,8 +61,8 @@ const OrderHistory = () => {
 
   const renderOrder = ({ item }) => (
     <View style={styles.orderRow}>
-      <Text style={styles.orderCell}>{item.restaurant_name}</Text>
-      <Text style={styles.orderCell}>{item.status}</Text>
+      <Text style={styles.restaurantNameCell}>{item.restaurant_name}</Text>
+      <Text style={styles.statusCell}>{item.status.toUpperCase()}</Text>
       <TouchableOpacity style={styles.orderCell} onPress={() => handleOrderView(item)}>
       <View style={styles.iconContainer}>
         <MaterialCommunityIcons name="magnify-plus" size={24} color="black" />
@@ -126,8 +126,8 @@ const OrderHistory = () => {
     <View style={styles.container}>
       <Text style={styles.title}>MY ORDERS</Text>
       <View style={styles.orderHeader}>
-        <Text style={styles.orderHeaderCell}>ORDER</Text>
-        <Text style={styles.orderHeaderCell}>STATUS</Text>
+        <Text style={styles.orderHeaderCellOrder}>ORDER</Text>
+        <Text style={styles.orderHeaderCellStatus}>STATUS</Text>
         <Text style={styles.orderHeaderCell}>VIEW</Text>
       </View>
       {loading ? (
@@ -146,6 +146,18 @@ const OrderHistory = () => {
 
 
 const styles = StyleSheet.create({
+    restaurantNameCell: {
+        flex: 1.2,
+        textAlign: 'left',
+        marginLeft: 10,
+        fontWeight: 'bold',
+      },
+      statusCell: {
+        flex: 1,
+        textAlign: 'left',
+        marginLeft: 20,
+        fontWeight: 'bold',
+      },
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -153,10 +165,10 @@ const styles = StyleSheet.create({
       },
       title: {
         fontSize: 24,
-        fontWeight: 'bold',
         textAlign: 'left',
         marginTop: 20,
-        marginBottom: 10,
+        marginBottom: 20,
+        fontFamily: 'Oswald-Regular',
       },
       orderRow: {
         flexDirection: 'row',
@@ -239,6 +251,20 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         color: '#fff',
+      },
+      orderHeaderCellOrder: {
+        flex: 1,
+        textAlign: 'left',
+        fontWeight: 'bold',
+        color: '#fff',
+        marginLeft: 10,
+      },
+      orderHeaderCellStatus: {
+        flex: 1,
+        textAlign: 'left',
+        fontWeight: 'bold',
+        color: '#fff',
+        marginLeft: 40,
       },
       iconContainer: {
         flex: 1,
