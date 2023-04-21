@@ -10,7 +10,7 @@ import {
   Dimensions,
   ActivityIndicator,
 } from "react-native";
-import { FontAwesome as Icon } from "@expo/vector-icons";
+import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Card } from "react-native-elements";
@@ -76,6 +76,11 @@ const OrderHistory = () => {
     setModalVisible(true);
   };
 
+//function to handle closing the modal
+const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
   const renderModal = () => {
     if (!selectedOrder) {
       return null;
@@ -84,6 +89,10 @@ const OrderHistory = () => {
     
 
     return (
+        <>
+        {modalVisible && (
+          <View style={styles.dimBackground} />
+        )}
       <Modal
         animationType="slide"
         transparent={true}
@@ -94,31 +103,35 @@ const OrderHistory = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+          <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>{selectedOrder.restaurant_name}</Text>
-            <Text style={styles.modalText}>Order Date: {selectedOrder.order_date}</Text>
-            <Text style={styles.modalText}>Status: {selectedOrder.status}</Text>
-            <Text style={styles.modalText}>Courier: {selectedOrder.courier_name}</Text>
+            <Text style={styles.modalTextW}>Order Date: {selectedOrder.order_date}</Text>
+            <Text style={styles.modalTextW}>Status: {selectedOrder.status}</Text>
+            <Text style={styles.modalTextW}>Courier: {selectedOrder.courier_name}</Text>
+            <TouchableOpacity
+          style={styles.closeButton}
+          onPress={handleCloseModal}
+        >
+          <FontAwesome name="times" size={24} color="white" />
+        </TouchableOpacity>
+          </View>
             <View style={styles.modalProductsContainer}>
             {selectedOrder.products.map((products, index) => (
                   <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-                    <Text style={styles.modalText}>{products.product_name}</Text>
-                    <Text style={styles.modalText}>x{products.quantity}</Text>
-                    <Text style={styles.modalText}>{(products.total_cost /100).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Text>
-                  </View>
+                  <Text style={[styles.modalText, styles.itemName]}>{products.product_name}</Text>
+                  <Text style={[styles.modalText, styles.itemQuantity]}>x{products.quantity}</Text>
+                  <Text style={[styles.modalText, styles.itemPrice]}>{(products.total_cost /100).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Text>
+                </View>
                 ))}
             </View>
+            <View style={styles.dividerLine} />
             <Text style={styles.modalTotal}>
               TOTAL: ${(selectedOrder.total_cost / 100).toFixed(2)}
             </Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.closeButtonText}>CLOSE</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </Modal>
+        </>
     );
   };
 
@@ -146,6 +159,15 @@ const OrderHistory = () => {
 
 
 const styles = StyleSheet.create({
+    dimBackground: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 1,
+      },
     restaurantNameCell: {
         flex: 1.2,
         textAlign: 'left',
@@ -187,30 +209,67 @@ const styles = StyleSheet.create({
         marginTop: 22,
       },
       modalView: {
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
+        backgroundColor: "white",
+        borderRadius: 10,
+        padding: 20,
+        alignItems: "center",
+        width: "90%",
+      },
+      modalHeader: {
+        backgroundColor: "#222126",
+        borderTopLeftRadius: 7,
+        borderTopRightRadius: 10,
+        padding: 10,
+        paddingBottom: 20,
+        width: "108%",
+        // alignItems: "center",
+        top: -10,
       },
       modalTitle: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 15,
+        color: '#DA583B',
+        marginBottom: 5,
+        marginLeft: 15,
       },
       modalText: {
-        marginBottom: 0,
+        color: '#000', 
+        marginLeft: 15,
       },
-      modalProductsContainer: {
-        marginBottom: 15,
+      modalTextW: {
+        color: '#fff', 
+        marginBottom: 5,
+        marginLeft: 15,
       },
+      itemContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 5,
+      },
+      itemName: {
+        width: '44%',
+        textAlign: "left",
+        fontSize: 14,
+        color: '#000', 
+      },
+      itemQuantity: {
+        width: '20%',
+        textAlign: "center",
+        fontSize: 14,
+        color: '#000', 
+      },
+      itemPrice: {
+        width: '20%',
+        textAlign: "right",
+        fontSize: 14,
+        color: '#000', 
+      },
+      closeButton: {
+        position: "absolute",
+        top: 55,
+        right: 25,
+      },      
       modalProductRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -222,16 +281,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
       },
       modalTotal: {
-        fontWeight: 'bold',
         fontSize: 18,
         marginBottom: 15,
-      },
-      closeButton: {
-        backgroundColor: '#2196F3',
-        borderRadius: 20,
-        padding: 10,
-        paddingHorizontal: 20,
-        elevation: 2,
+        textAlign: 'right',
+        alignSelf: 'flex-end',
+        fontFamily: 'Oswald-Regular',
       },
       closeButtonText: {
         color: 'white',
@@ -270,6 +324,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+      },
+      dividerLine: {
+        borderBottomWidth: 1,
+        borderBottomColor: 'black',
+        width: '100%',
+        marginBottom: 10,
       },
     });
 

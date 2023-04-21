@@ -6,7 +6,7 @@ import { Modal, Text, TouchableOpacity, View, StyleSheet, ActivityIndicator } fr
 
 //add icon
 import { FontAwesome } from '@expo/vector-icons';
- 
+
 
 const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
     console.log("Order details:", orderDetails);
