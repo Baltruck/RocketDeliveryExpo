@@ -9,31 +9,24 @@ import {
   Dimensions,
 } from "react-native";
 import { FontAwesome as Icon } from "@expo/vector-icons";
-import { Card } from "react-native-elements";
 import globalStyles from "../globalStyles";
-import { Asset } from "expo-asset";
-import Constants from "expo-constants";
 import ConfirmationModal from "../components/ConfirmationModal";
 import menuImage from "../../assets/Images/RestaurantMenu.jpg";
-import { useRoute } from "@react-navigation/native";
+import redirApi from "../components/NgrokUrl";
 
 const screenWidth = Dimensions.get("window").width;
-
-// const route = useRoute();
 
 const MenuScreen = ({ route }) => {
   const { restaurantId } = route.params;
   const [restaurant, setRestaurant] = useState(null);
   const [products, setProducts] = useState([]);
-//   const [orderItems, setOrderItems] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
   const [orderButtonDisabled, setOrderButtonDisabled] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  
 
   useEffect(() => {
     // Fetch restaurant data from database
-    fetch(`https://2ee4-74-50-186-92.ngrok-free.app/api/restaurants`)
+    fetch(`${redirApi}api/restaurants`)
       .then((response) => response.json())
       .then((data) => {
         const info = data.find((item) => item.id === restaurantId);
@@ -44,21 +37,19 @@ const MenuScreen = ({ route }) => {
       );
 
     // Fetch products data from database
-    fetch(
-      `https://2ee4-74-50-186-92.ngrok-free.app/api/products?restaurant_id=${restaurantId}`
-    )
+    fetch(`${redirApi}api/products?restaurant_id=${restaurantId}`)
       .then((response) => response.json())
       .then((data) => {
         // set quantity to zero for each product
         const productsWithQuantity = data.map((product) => ({
-            ...product,
-            quantity: 0,
-          }));
-          setProducts(productsWithQuantity);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          ...product,
+          quantity: 0,
+        }));
+        setProducts(productsWithQuantity);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [restaurantId]);
 
   useEffect(() => {
@@ -68,38 +59,31 @@ const MenuScreen = ({ route }) => {
     );
     setOrderButtonDisabled(orderButtonDisabledState);
   }, [products]);
-  
 
   const handleQuantityChange = (productId, newQuantity) => {
-  console.log('productId', productId);
-  if (newQuantity < 0) return;
+    console.log("productId", productId);
+    if (newQuantity < 0) return;
 
-  const updatedProducts = products.map((product) => {
-    if (product.id === productId) {
-      console.log('productId2', productId);
-      return { ...product, quantity: newQuantity };
-    }
-    return product;
-  });
+    const updatedProducts = products.map((product) => {
+      if (product.id === productId) {
+        console.log("productId2", productId);
+        return { ...product, quantity: newQuantity };
+      }
+      return product;
+    });
 
-  setProducts(updatedProducts);
-};
-
-  
+    setProducts(updatedProducts);
+  };
 
   const handleOrderButtonPress = () => {
     // Check if any item has a quantity greater than zero
     const itemsInOrder = products.filter((item) => item.quantity > 0);
     if (itemsInOrder.length > 0) {
-    //   setOrderItems(itemsInOrder);
       // Open confirmation modal for order
       setModalVisible(true);
     }
-};
+  };
 
-  
-  
-  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -127,18 +111,19 @@ const MenuScreen = ({ route }) => {
           </View>
         </View>
         <View style={styles.createOrderButtonWrapper}>
-        <TouchableOpacity
-          style={
-            orderButtonDisabled
-              ? styles.createOrderButtonDisabled
-              : styles.createOrderButton
-          }
-          disabled={orderButtonDisabled}
-          onPress={() => handleOrderButtonPress()}
-        >
-          <Text style={[styles.createOrderButtonText, globalStyles.title]}>Create Order</Text>
-
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={
+              orderButtonDisabled
+                ? styles.createOrderButtonDisabled
+                : styles.createOrderButton
+            }
+            disabled={orderButtonDisabled}
+            onPress={() => handleOrderButtonPress()}
+          >
+            <Text style={[styles.createOrderButtonText, globalStyles.title]}>
+              Create Order
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
       <FlatList
@@ -170,11 +155,11 @@ const MenuScreen = ({ route }) => {
                   item.quantity === 0 && styles.itemCounterButtonDisabled,
                 ]}
                 onPress={() => {
-                    console.log('Minus button pressed:', item.id);
-                    handleQuantityChange(item.id, item.quantity - 1);
-                  }}
-                  disabled={item.quantity === 0}
-                >
+                  console.log("Minus button pressed:", item.id);
+                  handleQuantityChange(item.id, item.quantity - 1);
+                }}
+                disabled={item.quantity === 0}
+              >
                 <Text
                   style={[
                     styles.itemCounterButtonText,
@@ -188,10 +173,10 @@ const MenuScreen = ({ route }) => {
               <TouchableOpacity
                 style={styles.itemCounterButton}
                 onPress={() => {
-                    console.log('Plus button pressed:', item.id);
-                    handleQuantityChange(item.id, item.quantity + 1);
-                  }}
-                >
+                  console.log("Plus button pressed:", item.id);
+                  handleQuantityChange(item.id, item.quantity + 1);
+                }}
+              >
                 <Text style={styles.itemCounterButtonText}>+</Text>
               </TouchableOpacity>
             </View>
@@ -199,17 +184,10 @@ const MenuScreen = ({ route }) => {
         )}
       />
       <ConfirmationModal
-  modalVisible={modalVisible}
-  setModalVisible={setModalVisible}
-  orderDetails={{ restaurant, products }}
-/>
-
-
-
-
-
-
-
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        orderDetails={{ restaurant, products }}
+      />
     </View>
   );
 };
@@ -255,7 +233,7 @@ const styles = StyleSheet.create({
     marginRight: 2,
   },
   createOrderButtonWrapper: {
-    position: 'absolute',
+    position: "absolute",
     top: 70,
     right: 20,
   },
@@ -297,13 +275,11 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontWeight: "bold",
     fontSize: 16,
-    // marginBottom: 5,
   },
   itemPrice: {
     fontWeight: "bold",
     fontSize: 14,
     color: "#222126",
-    // marginBottom: 5,
   },
   itemDescription: {
     fontSize: 12,
@@ -316,13 +292,13 @@ const styles = StyleSheet.create({
   },
   itemCounterButton: {
     backgroundColor: "#222126",
-    width: 30, 
-    height: 30, 
-    borderRadius: 15, 
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     padding: 5,
     marginHorizontal: 15,
-    justifyContent: "center", 
-    alignItems: "center", 
+    justifyContent: "center",
+    alignItems: "center",
   },
   itemCounterButtonDisabled: {
     backgroundColor: "#222126",
@@ -343,11 +319,9 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 15,
-    // fontWeight: "bold",
   },
   priceText: {
     fontSize: 15,
-    // fontWeight: "bold",
   },
 });
 
