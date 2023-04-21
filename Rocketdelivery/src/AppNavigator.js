@@ -1,17 +1,21 @@
-import React from 'react';
-import { Image, Dimensions } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TouchableOpacity, Text, StyleSheet, View, ScrollView } from 'react-native';
-import HomeScreen from './screens/HomeScreen';
-import DetailsScreen from './screens/DetailsScreen';
-import Footer from './components/Footer';
-import globalStyles from './globalStyles';
-import LoginScreen from './screens/LoginScreen';
-import RestaurantsScreen from './screens/RestaurantsScreen';
-import MenuScreen from './screens/MenuScreen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import OrderHistory from './screens/OrderHistory';
+import React from "react";
+import { Image, Dimensions } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  View,
+  ScrollView,
+} from "react-native";
+import Footer from "./components/Footer";
+import globalStyles from "./globalStyles";
+import LoginScreen from "./screens/LoginScreen";
+import RestaurantsScreen from "./screens/RestaurantsScreen";
+import MenuScreen from "./screens/MenuScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import OrderHistory from "./screens/OrderHistory";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -21,19 +25,17 @@ const aspectRatio = 163 / 594;
 const imageHeight = imageWidth * aspectRatio;
 
 const handleLogout = (navigation) => {
-  AsyncStorage.multiRemove(['user_id', 'customer_id'])
+  AsyncStorage.multiRemove(["user_id", "customer_id"])
     .then(() => {
-      navigation.navigate('Login');
+      navigation.navigate("Login");
     })
     .catch((error) => {
-      console.error('Error clearing AsyncStorage:', error);
+      console.error("Error clearing AsyncStorage:", error);
     });
 };
 
 const ScreenWrapper = ({ children }) => (
-  <View style={styles.container}>
-      {children}
-  </View>
+  <View style={styles.container}>{children}</View>
 );
 
 function Restaurants(props) {
@@ -69,13 +71,16 @@ function TabNavigator() {
         component={Restaurants}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
+      <Tab.Screen
+        name="Menu"
+        component={Menu}
+        options={{ headerShown: false }}
+      />
       <Tab.Screen
         name="OrderHistory"
         component={OrderHistoryScreen}
         options={{ headerShown: false }}
       />
-      {/* <Tab.Screen name="Détails" component={Details} /> */}
     </Tab.Navigator>
   );
 }
@@ -87,11 +92,15 @@ function AppNavigator() {
       screenOptions={{
         headerTitleStyle: globalStyles.title,
         headerStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
         },
       }}
     >
-      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Home"
         component={TabNavigator}
@@ -99,7 +108,7 @@ function AppNavigator() {
           headerTitle: () => null,
           headerLeft: () => (
             <Image
-              source={require('../assets/Images/AppLogoV1.png')}
+              source={require("../assets/Images/AppLogoV1.png")}
               style={{
                 width: imageWidth,
                 height: imageHeight,
@@ -110,30 +119,32 @@ function AppNavigator() {
             />
           ),
           headerRight: () => (
-            <TouchableOpacity style={styles.logoutButton} onPress={() => {
-              handleLogout(navigation);
-            }}>
+            <TouchableOpacity
+              style={styles.logoutButton}
+              onPress={() => {
+                handleLogout(navigation);
+              }}
+            >
               <Text style={styles.logoutButtonText}>LOG OUT</Text>
             </TouchableOpacity>
           ),
         })}
       />
     </Stack.Navigator>
-
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
+    position: "relative",
   },
   scrollView: {
     flexGrow: 1,
   },
   logoutButton: {
-    backgroundColor: '#DA583B',
-    color: '#ffffff',
+    backgroundColor: "#DA583B",
+    color: "#ffffff",
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderRadius: 7,
@@ -141,13 +152,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   logoutButtonText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 15,
     paddingTop: 5,
     padding: 5,
-    fontFamily: 'Oswald-Regular',
+    fontFamily: "Oswald-Regular",
   },
 });
 
 export default AppNavigator;
-
