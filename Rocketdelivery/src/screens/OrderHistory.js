@@ -97,7 +97,7 @@ const OrderHistory = () => {
             <Text style={styles.modalTitle}>{selectedOrder.restaurant_name}</Text>
             <Text style={styles.modalText}>Order Date: {selectedOrder.order_date}</Text>
             <Text style={styles.modalText}>Status: {selectedOrder.status}</Text>
-            <Text style={styles.modalText}>Courier: {selectedOrder.courier_id}</Text>
+            <Text style={styles.modalText}>Courier: {selectedOrder.courier_name}</Text>
             <View style={styles.modalProductsContainer}>
             {selectedOrder.products.map((products, index) => (
                   <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
