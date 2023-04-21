@@ -125,6 +125,7 @@ const localImages = [
           <Picker
             selectedValue={selectedRating}
             style={{ height: 50, width: 150, color: 'white', marginHorizontal: -4 }}
+            itemStyle={styles.pickerItem}
             onValueChange={(itemValue) => handleRatingChange(itemValue)}
           >
             <Picker.Item label="-- Select --"  value="all" />
@@ -142,6 +143,7 @@ const localImages = [
           <Picker
             selectedValue={selectedPrice}
             style={{ height: 50, width: 150, color: 'white', marginHorizontal: -4 }}
+            itemStyle={styles.pickerItem}
             onValueChange={(itemValue) => handlePriceChange(itemValue)}
           >
             <Picker.Item label="-- Select --" value="all" />
@@ -201,14 +203,14 @@ const styles = StyleSheet.create({
     headerText: {
       fontWeight: "bold",
       fontSize: 20,
-    //   width: screenWidth * 0.5,
       transform: [
         { scaleY: 1.2 }, 
         { scaleX: 0.8 }, 
       ],
       marginLeft: -41,
         marginTop: -15,
-        marginBottom: 40,
+        marginBottom: 20,
+        fontFamily: 'Oswald-Regular',
     },
     filterContainer: {
       flexDirection: "row",
@@ -245,9 +247,13 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       color: "#fff",
     },
+    pickerItem: {
+        textAlign: 'center', 
+        justifyContent: 'center', 
+      },
     card: {
       width: screenWidth * 0.39,
-      marginBottom: 20,
+      marginBottom: 10,
       borderRadius: 7,
       overflow: "hidden",
       paddingHorizontal: 0,
@@ -257,21 +263,20 @@ const styles = StyleSheet.create({
     cardImage: {
       borderWidth: 0,
       width: "100%",
-      height: 150,
+      height: 110,
       resizeMode: "cover",
     },
     cardTitle: {
       fontSize: 14,
       fontWeight: "bold",
-    //   margin: 10,
         marginTop: 10,
         marginBottom: 10,
-        // marginRight: 10,
     },
     cardStars: {
       flexDirection: "row",
       alignItems: "center",
       marginLeft: 10,
+      marginBottom: 10,
     },
     starIcon: {
       color: "#000000",
