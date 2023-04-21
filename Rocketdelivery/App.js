@@ -8,7 +8,6 @@ import DetailsScreen from './src/screens/DetailsScreen';
 import AppNavigator from './src/AppNavigator';
 import { useFonts } from 'expo-font';
 
-
 export default function App() {
   const [fontsLoaded] = useFonts({
     'Oswald-Regular': require('./assets/fonts/Oswald-Regular.ttf'),
