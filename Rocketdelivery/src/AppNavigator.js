@@ -11,6 +11,7 @@ import LoginScreen from './screens/LoginScreen';
 import RestaurantsScreen from './screens/RestaurantsScreen';
 import MenuScreen from './screens/MenuScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import OrderHistory from './screens/OrderHistory';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,6 +64,7 @@ function Restaurants(props) {
     </ScreenWrapper>
   );
 }
+
 
 function Menu(props) {
   return (
@@ -125,7 +127,13 @@ function AppNavigator() {
           ),
         })}
       />
+      <Stack.Screen
+        name="OrderHistory"
+        component={OrderHistory}
+        options={{ headerShown: true, title: 'My Orders' }}
+      />
     </Stack.Navigator>
+
   );
 }
 
