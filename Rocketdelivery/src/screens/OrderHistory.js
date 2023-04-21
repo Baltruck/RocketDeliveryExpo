@@ -64,7 +64,9 @@ const OrderHistory = () => {
       <Text style={styles.orderCell}>{item.restaurant_name}</Text>
       <Text style={styles.orderCell}>{item.status}</Text>
       <TouchableOpacity style={styles.orderCell} onPress={() => handleOrderView(item)}>
-      <MaterialCommunityIcons name="magnify-plus" size={24} color="black" />
+      <View style={styles.iconContainer}>
+        <MaterialCommunityIcons name="magnify-plus" size={24} color="black" />
+      </View>
       </TouchableOpacity>
     </View>
   );
@@ -80,8 +82,6 @@ const OrderHistory = () => {
     }
 
     
-     // check if the selectedOrder has a products property
-//   const products = selectedOrder.products || [];
 
     return (
       <Modal
@@ -125,6 +125,11 @@ const OrderHistory = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MY ORDERS</Text>
+      <View style={styles.orderHeader}>
+        <Text style={styles.orderHeaderCell}>ORDER</Text>
+        <Text style={styles.orderHeaderCell}>STATUS</Text>
+        <Text style={styles.orderHeaderCell}>VIEW</Text>
+      </View>
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
@@ -158,8 +163,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
       },
       orderCell: {
         flex: 1,
@@ -221,6 +224,26 @@ const styles = StyleSheet.create({
       closeButtonText: {
         color: 'white',
         fontWeight: 'bold',
+      },
+      orderHeader: {
+        backgroundColor: '#222126',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+      },
+      orderHeaderCell: {
+        flex: 1,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color: '#fff',
+      },
+      iconContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
       },
     });
 
