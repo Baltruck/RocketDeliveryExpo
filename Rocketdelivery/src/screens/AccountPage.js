@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         alignSelf: "flex-start",
         marginBottom: 20,
+        color: "rgba(33, 33, 38, 0.6)",
       },
       updateButton: {
         backgroundColor: "#DA583B",
