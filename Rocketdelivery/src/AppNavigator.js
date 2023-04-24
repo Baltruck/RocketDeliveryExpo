@@ -18,6 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import OrderHistory from "./screens/OrderHistory";
 import AccountSelectorScreen from "./screens/AccountSelectorScreen";
 import CourierScreen from "./screens/CourierScreen";
+import AccountPage from "./screens/AccountPage";
 
 
 const Stack = createStackNavigator();
@@ -91,6 +92,11 @@ function TabNavigator() {
       <Tab.Screen
         name="AccountSelectorScreen"
         component={AccountSelectorScreen}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="AccountPage"
+        component={AccountPage}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>

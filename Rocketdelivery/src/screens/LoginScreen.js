@@ -82,9 +82,11 @@ const LoginScreen = () => {
             navigation.navigate("Home", { screen: "AccountSelectorScreen" });
 
           } else if (validCustomerId) {
+            storeData("user_type", "customer");
             // navigation.navigate("RestaurantsScreen");
             navigation.navigate("Home", { screen: "Restaurants" });
           } else if (validCourierId) {
+            storeData("user_type", "courier");
             // navigation.navigate("CourierScreen");
             navigation.navigate("Home", { screen: "CourierScreen" });
           } else {

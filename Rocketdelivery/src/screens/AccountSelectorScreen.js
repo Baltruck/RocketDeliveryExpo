@@ -2,24 +2,37 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome"; // do npm install react-native-vector-icons
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 
 const screenWidth = Dimensions.get("window").width;
 
+// define user type
+const setUserType = async (type) => {
+    try {
+      await AsyncStorage.setItem("user_type", type);
+    } catch (error) {
+      console.error("Error saving user type:", error);
+    }
+  };
+  
 
 const AccountSelectorScreen = () => {
   const navigation = useNavigation();
 
-  const navigateToCustomerLogin = () => {
+  const navigateToCustomerLogin = async () => {
+    await setUserType("customer");
     navigation.navigate("Home", { screen: "Restaurants" });
   };
-
-  const navigateToCourierLogin = () => {
-// change to real page
-// navigation.navigate("Home", { screen: "CourierScreen" });
+  
+  const navigateToCourierLogin = async () => {
+    await setUserType("courier");
+    // change to real page
+    // navigation.navigate("Home", { screen: "CourierScreen" });
     navigation.navigate("CourierScreen");
-    
   };
+  
 
   return (
     <View style={styles.container}>

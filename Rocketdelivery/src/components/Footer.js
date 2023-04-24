@@ -2,6 +2,8 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome5 } from "@expo/vector-icons";
+import AccountPage from "../screens/AccountPage";
+
 
 const Footer = () => {
   const navigation = useNavigation();
@@ -21,6 +23,14 @@ const Footer = () => {
         <FontAwesome5 name="history" size={24} color="black" />
         <Text style={styles.footerText}>OrderHistory</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+  style={styles.footerElement}
+  onPress={() => navigation.navigate("AccountPage")}
+>
+  <FontAwesome5 name="user" size={24} color="black" />
+  <Text style={styles.footerText}>Account</Text>
+</TouchableOpacity>
+
     </View>
   );
 };
