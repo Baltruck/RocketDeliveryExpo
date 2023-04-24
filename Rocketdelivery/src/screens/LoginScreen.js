@@ -78,13 +78,15 @@ const LoginScreen = () => {
           const validCourierId = data.courier_id !== null && data.courier_id !== 0;
   
           if (validCustomerId && validCourierId) {
-            navigation.navigate("AccountSelectorScreen");
+            // navigation.navigate("AccountSelectorScreen");
+            navigation.navigate("Home", { screen: "AccountSelectorScreen" });
+
           } else if (validCustomerId) {
             // navigation.navigate("RestaurantsScreen");
             navigation.navigate("Home", { screen: "Restaurants" });
           } else if (validCourierId) {
-            navigation.navigate("CourierScreen");
-            // navigation.navigate("Home", { screen: "CourierScreen" });
+            // navigation.navigate("CourierScreen");
+            navigation.navigate("Home", { screen: "CourierScreen" });
           } else {
             setError("Invalid account type");
           }

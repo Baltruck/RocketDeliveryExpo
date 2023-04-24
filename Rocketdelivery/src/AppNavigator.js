@@ -79,8 +79,18 @@ function TabNavigator() {
         options={{ headerShown: false }}
       />
       <Tab.Screen
+        name="CourierScreen"
+        component={CourierScreen}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
         name="OrderHistory"
         component={OrderHistoryScreen}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="AccountSelectorScreen"
+        component={AccountSelectorScreen}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>
@@ -132,7 +142,7 @@ function AppNavigator() {
           ),
         })}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="AccountSelectorScreen"
         component={AccountSelectorScreen}
         options={{ headerShown: false }}
@@ -141,7 +151,7 @@ function AppNavigator() {
         name="CourierScreen"
         component={CourierScreen}
         options={{ headerShown: false }}
-      />
+      /> */}
       
     </Stack.Navigator>
   );
