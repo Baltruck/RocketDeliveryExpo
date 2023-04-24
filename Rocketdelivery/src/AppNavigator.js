@@ -16,6 +16,9 @@ import RestaurantsScreen from "./screens/RestaurantsScreen";
 import MenuScreen from "./screens/MenuScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import OrderHistory from "./screens/OrderHistory";
+import AccountSelectorScreen from "./screens/AccountSelectorScreen";
+import CourierScreen from "./screens/CourierScreen";
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -129,6 +132,17 @@ function AppNavigator() {
           ),
         })}
       />
+      <Stack.Screen
+        name="AccountSelectorScreen"
+        component={AccountSelectorScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CourierScreen"
+        component={CourierScreen}
+        options={{ headerShown: false }}
+      />
+      
     </Stack.Navigator>
   );
 }

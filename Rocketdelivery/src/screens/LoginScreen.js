@@ -16,12 +16,44 @@ const storeData = async (key, value) => {
   }
 };
 
+
 const LoginScreen = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const navigation = useNavigation();
   const [error, setError] = useState("");
 
+  // OLD 
+  // const handleLogin = () => {
+  //   fetch(`${redirApi}api/login`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       email,
+  //       password,
+  //     }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       if (data.success) {
+  //         // Stock the user_id, customer_id in local storage
+  //         storeData("user_id", data.user_id.toString());
+  //         storeData("customer_id", data.customer_id.toString());
+
+  //         // navigation.navigate('Restaurants');
+  //         navigation.navigate("Home", { screen: "Restaurants" });
+  //       } else {
+  //         setError("Invalid email or password");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+  // NEW
   const handleLogin = () => {
     fetch(`${redirApi}api/login`, {
       method: "POST",
@@ -36,12 +68,26 @@ const LoginScreen = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          // Stock the user_id, customer_id in local storage
+          // Stock the user_id, customer_id, courier_id in local storage
           storeData("user_id", data.user_id.toString());
           storeData("customer_id", data.customer_id.toString());
-
-          // navigation.navigate('Restaurants');
-          navigation.navigate("Home", { screen: "Restaurants" });
+          storeData("courier_id", data.courier_id.toString());
+  
+          // Check for valid customer_id and courier_id
+          const validCustomerId = data.customer_id !== null && data.customer_id !== 0;
+          const validCourierId = data.courier_id !== null && data.courier_id !== 0;
+  
+          if (validCustomerId && validCourierId) {
+            navigation.navigate("AccountSelectorScreen");
+          } else if (validCustomerId) {
+            // navigation.navigate("RestaurantsScreen");
+            navigation.navigate("Home", { screen: "Restaurants" });
+          } else if (validCourierId) {
+            navigation.navigate("CourierScreen");
+            // navigation.navigate("Home", { screen: "CourierScreen" });
+          } else {
+            setError("Invalid account type");
+          }
         } else {
           setError("Invalid email or password");
         }
@@ -50,6 +96,7 @@ const LoginScreen = () => {
         console.error(error);
       });
   };
+  
 
   return (
     <View style={styles.container}>
