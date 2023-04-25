@@ -184,6 +184,20 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 1,
   },
+
+  orderHeaderCellOrderId: {
+    flex: 1,
+    textAlign: "center", // Changez "left" en "center"
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  orderHeaderCellAddress: {
+    flex: 1,
+    textAlign: "center", // Changez "left" en "center"
+    fontWeight: "bold",
+    color: "#fff",
+  },
+
   restaurantNameCell: {
     flex: 1.2,
     textAlign: "left",
@@ -196,6 +210,17 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontWeight: "bold",
   },
+  orderIdCell: {
+    flex: 1,
+    textAlign: "left",
+    fontWeight: "bold",
+  },
+  addressCell: {
+    flex: 1,
+    textAlign: "left",
+    fontWeight: "bold",
+  },
+  
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -210,7 +235,7 @@ const styles = StyleSheet.create({
   },
   orderRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 10,
   },
