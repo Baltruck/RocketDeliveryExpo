@@ -58,7 +58,7 @@ const CourierScreen = () => {
       <Text style={styles.addressCell}>{item.customer_address}</Text>
       <Text style={styles.statusCell}>{item.status.toUpperCase()}</Text>
       <TouchableOpacity
-        style={styles.orderCell}
+        style={styles.viewCell}
         onPress={() => handleOrderView(item)}
       >
         <View style={styles.iconContainer}>
@@ -187,16 +187,18 @@ const styles = StyleSheet.create({
   },
 
   orderHeaderCellOrderId: {
-    flex: 1,
-    textAlign: "center", // Changez "left" en "center"
+    flex: 0.5,
+    textAlign: "center", 
     fontWeight: "bold",
     color: "#fff",
+    marginLeft: 15,
   },
   orderHeaderCellAddress: {
-    flex: 1,
-    textAlign: "center", // Changez "left" en "center"
+    flex: 1.4,
+    textAlign: "center", 
     fontWeight: "bold",
     color: "#fff",
+    // marginLeft: -10,
   },
 
   restaurantNameCell: {
@@ -206,18 +208,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   statusCell: {
-    flex: 1,
-    textAlign: "left",
+    flex: 1.3,
+    textAlign: "center",
     marginLeft: 20,
     fontWeight: "bold",
   },
   orderIdCell: {
-    flex: 1,
-    textAlign: "left",
+    flex: 0.5,
+    textAlign: "center",
     fontWeight: "bold",
+    marginLeft: 15,
+    marginRight: 15,
   },
   addressCell: {
-    flex: 1,
+    flex: 1.4,
     textAlign: "left",
     fontWeight: "bold",
   },
@@ -241,7 +245,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   orderCell: {
-    flex: 1,
+    flex: 0.5,
     textAlign: "center",
   },
   centeredView: {
@@ -342,10 +346,14 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ccc",
   },
   orderHeaderCell: {
-    flex: 1,
+    flex: 0.6,
     textAlign: "center",
     fontWeight: "bold",
     color: "#fff",
+  },
+  viewCell: {
+    flex: 0.5,
+    textAlign: "center",
   },
   orderHeaderCellOrder: {
     flex: 1,
