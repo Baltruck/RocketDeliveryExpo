@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import redirApi from "../components/NgrokUrl";
+import { CheckBox } from "react-native-elements";
+
 
 import {
   Modal,
@@ -14,7 +16,11 @@ import {
 //add icon
 import { FontAwesome } from "@expo/vector-icons";
 
+
 const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
+  const [emailCheckbox, setEmailCheckbox] = useState(false);
+  const [phoneCheckbox, setPhoneCheckbox] = useState(false);
+
   console.log("Order details:", orderDetails);
   console.log("Products in ConfirmationModal:", orderDetails.products);
   const { restaurant, products } = orderDetails;
@@ -133,9 +139,11 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
           <TouchableOpacity
             style={styles.confirmOrderButton}
             onPress={handleConfirmOrder}
-            disabled={orderStatus === "processing"}
+            disabled={orderStatus === "processing" || (!emailCheckbox && !phoneCheckbox)}
           >
-            <Text style={styles.confirmOrderButtonText}>CONFIRM ORDER</Text>
+            <Text style={styles.confirmOrderButtonText}>
+              {emailCheckbox || phoneCheckbox ? "CONFIRM ORDER" : "IN PROGRESS"}
+            </Text>
           </TouchableOpacity>
         );
     }
@@ -182,6 +190,26 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
               TOTAL: $ {(totalCost / 100).toFixed(2)}
             </Text>
           </View>
+          <View style={styles.checkboxContainer}>
+  <Text style={styles.confirmationText}>
+    Would you like to receive your order confirmation by email and/or text?
+  </Text>
+  <View style={styles.checkboxes}>
+    <CheckBox
+      title="By Email"
+      checked={emailCheckbox}
+      onPress={() => setEmailCheckbox(!emailCheckbox)}
+      containerStyle={styles.checkbox}
+    />
+    <CheckBox
+      title="By Phone"
+      checked={phoneCheckbox}
+      onPress={() => setPhoneCheckbox(!phoneCheckbox)}
+      containerStyle={styles.checkbox}
+    />
+  </View>
+</View>
+
 
           {renderOrderButton()}
         </View>
@@ -191,6 +219,26 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
 };
 
 const styles = StyleSheet.create({
+
+  checkboxContainer: {
+    alignSelf: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  confirmationText: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  checkboxes: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  checkbox: {
+    backgroundColor: "transparent",
+    borderWidth: 0,
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",

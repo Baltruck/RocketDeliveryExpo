@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import redirApi from "../components/NgrokUrl";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -19,29 +20,73 @@ const AccountPage = () => {
 
   const fetchUserType = async () => {
     try {
+      const user_id = await AsyncStorage.getItem("user_id");
       const type = await AsyncStorage.getItem("user_type");
       if (type) {
         setUserType(type.charAt(0).toUpperCase() + type.slice(1));
       }
+      fetchAccountInfo(user_id, type);
     } catch (error) {
       console.error("Error fetching user type:", error);
     }
   };
 
+
+const fetchAccountInfo = async (user_id, userType) => {
+    try {
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
+  
+      const response = await fetch(
+        `${redirApi}api/account?id=${user_id}&type=${userType.toLowerCase()}`,
+        {
+          method: "GET",
+          headers: headers,
+        }
+      );
+      const data = await response.json();
+      setEmail(data.user_email);
+      setSecondaryEmail(data.email);
+      setPhone(data.phone);
+    } catch (error) {
+      console.error("Error fetching account info:", error);
+    }
+  };
+  
+
+const handleUpdateAccount = async () => {
+    try {
+      const user_id = await AsyncStorage.getItem("user_id");
+  
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
+  
+      const response = await fetch(
+        `${redirApi}api/account?id=${user_id}&type=${userType.toLowerCase()}`,
+        {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify({
+            email: secondaryEmail,
+            phone: phone,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (data.message === "Account updated") {
+        alert("Account information has been updated");
+      } else {
+        console.error("Error updating account info:", data.error);
+      }
+    } catch (error) {
+      console.error("Error updating account info:", error);
+    }
+  };
+  
+
   useEffect(() => {
     fetchUserType();
   }, []);
-
-  // Simulate fetching the email and phone number from the API
-  useEffect(() => {
-    setEmail("user@example.com");
-    setSecondaryEmail("secondary@example.com");
-    setPhone("555-123-4567");
-  }, []);
-
-  const handleUpdateAccount = () => {
-    // Handle account update logic here
-  };
 
   return (
     <View style={styles.container}>
