@@ -27,17 +27,17 @@ const CourierScreen = () => {
 
   const fetchOrders = async () => {
     try {
-        const courierId = await AsyncStorage.getItem("courier_id");
-
-        if (!courierId) {
-            console.error("Courier ID not found in local storage");
+        const userId = await AsyncStorage.getItem("user_id");
+  
+        if (!userId) {
+            console.error("User ID not found in local storage");
             return;
-          }
-
-          const response = await fetch(
-            `${redirApi}api/orders?type=courier&id=${courierId}`
-          );
-
+        }
+  
+        const response = await fetch(
+          `${redirApi}api/orders?type=courier&id=${userId}`
+        );
+  
       if (response.ok) {
         const data = await response.json();
         setOrders(data);
@@ -50,6 +50,7 @@ const CourierScreen = () => {
       setLoading(false);
     }
   };
+  
 
   const renderOrder = ({ item }) => (
     <View style={styles.orderRow}>
