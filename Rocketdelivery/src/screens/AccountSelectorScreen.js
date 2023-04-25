@@ -1,38 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/FontAwesome"; // do npm install react-native-vector-icons
+import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
 
 const screenWidth = Dimensions.get("window").width;
 
-// define user type
-const setUserType = async (type) => {
-    try {
-      await AsyncStorage.setItem("user_type", type);
-    } catch (error) {
-      console.error("Error saving user type:", error);
-    }
-  };
-  
-
 const AccountSelectorScreen = () => {
   const navigation = useNavigation();
+  const [userType, setUserType] = useState("");
 
   const navigateToCustomerLogin = async () => {
-    await setUserType("customer");
+    await AsyncStorage.setItem("user_type", "customer");
+    setUserType("customer");
     navigation.navigate("Home", { screen: "Restaurants" });
   };
   
   const navigateToCourierLogin = async () => {
-    await setUserType("courier");
-    // change to real page
-    // navigation.navigate("Home", { screen: "CourierScreen" });
+    await AsyncStorage.setItem("user_type", "courier");
+    setUserType("courier");
     navigation.navigate("CourierScreen");
   };
   
+  useEffect(() => {
+    if (userType === "courier") {
+      navigation.navigate("CourierScreen");
+    }
+  }, [userType]);
 
   return (
     <View style={styles.container}>
@@ -45,19 +39,17 @@ const AccountSelectorScreen = () => {
         <TouchableOpacity
           style={styles.card}
           onPress={navigateToCustomerLogin}
-          
         >
           <Icon name="user" size={50} color="#DA583B" />
           <Text style={styles.cardText}>Customer</Text>
         </TouchableOpacity>
         <TouchableOpacity
-  style={styles.card}
-  onPress={navigateToCourierLogin}
->
-  <Icon name="car" size={50} color="#DA583B" />
-  <Text style={styles.cardText}>Courier</Text>
-</TouchableOpacity>
-
+          style={styles.card}
+          onPress={navigateToCourierLogin}
+        >
+          <Icon name="car" size={50} color="#DA583B" />
+          <Text style={styles.cardText}>Courier</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

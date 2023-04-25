@@ -10,12 +10,11 @@ const Footer = () => {
 
   useFocusEffect(
     useCallback(() => {
-      const updateUserType = async () => {
+      const fetchUserType = async () => {
         const storedUserType = await AsyncStorage.getItem("user_type");
         setUserType(storedUserType);
       };
-
-      updateUserType();
+      fetchUserType();
     }, [])
   );
 
