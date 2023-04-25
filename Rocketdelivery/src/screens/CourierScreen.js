@@ -25,6 +25,33 @@ const CourierScreen = () => {
     fetchOrders();
   }, []);
 
+  const renderStatusButton = (status) => {
+    let backgroundColor;
+    const statusLowerCase = status.toLowerCase();
+    
+    switch (statusLowerCase) {
+      case "delivered":
+        backgroundColor = "green";
+        break;
+      case "pending":
+        backgroundColor = "red";
+        break;
+      case "in progress":
+        backgroundColor = "yellow";
+        break;
+      default:
+        backgroundColor = "gray";
+    }
+  
+    return (
+      <TouchableOpacity style={[styles.statusButton, { backgroundColor }]}>
+        <Text style={styles.statusButtonText}>{status.toUpperCase()}</Text>
+      </TouchableOpacity>
+    );
+  };
+  
+  
+
   const fetchOrders = async () => {
     try {
         const userId = await AsyncStorage.getItem("user_id");
@@ -56,7 +83,7 @@ const CourierScreen = () => {
     <View style={styles.orderRow}>
       <Text style={styles.orderIdCell}>{item.id}</Text>
       <Text style={styles.addressCell}>{item.customer_address}</Text>
-      <Text style={styles.statusCell}>{item.status.toUpperCase()}</Text>
+      {renderStatusButton(item.status)}
       <TouchableOpacity
         style={styles.viewCell}
         onPress={() => handleOrderView(item)}
@@ -67,6 +94,7 @@ const CourierScreen = () => {
       </TouchableOpacity>
     </View>
   );
+  
 
   const handleOrderView = (order) => {
     setSelectedOrder(order);
@@ -184,6 +212,20 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 1,
+  },
+
+  statusButton: {
+    flex: 1.3,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 20,
+  },
+  statusButtonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 
   orderHeaderCellOrderId: {
