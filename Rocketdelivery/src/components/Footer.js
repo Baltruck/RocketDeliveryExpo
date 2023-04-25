@@ -1,36 +1,67 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { FontAwesome5 } from "@expo/vector-icons";
-import AccountPage from "../screens/AccountPage";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Footer = () => {
   const navigation = useNavigation();
+  const [userType, setUserType] = useState(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      const updateUserType = async () => {
+        const storedUserType = await AsyncStorage.getItem("user_type");
+        setUserType(storedUserType);
+      };
+
+      updateUserType();
+    }, [])
+  );
+
+  const renderFooter = () => {
+    if (userType === "customer") {
+      return (
+        <>
+          <TouchableOpacity
+            style={styles.footerElement}
+            onPress={() => navigation.navigate("Restaurants")}
+          >
+            <FontAwesome5 name="hamburger" size={24} color="black" />
+            <Text style={styles.footerText}>Restaurants</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.footerElement}
+            onPress={() => navigation.navigate("OrderHistory")}
+          >
+            <FontAwesome5 name="history" size={24} color="black" />
+            <Text style={styles.footerText}>OrderHistory</Text>
+          </TouchableOpacity>
+        </>
+      );
+    } else if (userType === "courier") {
+      return (
+        <TouchableOpacity
+          style={styles.footerElement}
+          onPress={() => navigation.navigate("CourierScreen")}
+        >
+          <FontAwesome5 name="history" size={24} color="black" />
+          <Text style={styles.footerText}>Deliveries</Text>
+        </TouchableOpacity>
+      );
+    }
+  };
+
   return (
     <View style={styles.footerContainer}>
+      {renderFooter()}
       <TouchableOpacity
         style={styles.footerElement}
-        onPress={() => navigation.navigate("Restaurants")}
+        onPress={() => navigation.navigate("AccountPage")}
       >
-        <FontAwesome5 name="hamburger" size={24} color="black" />
-        <Text style={styles.footerText}>Restaurants</Text>
+        <FontAwesome5 name="user" size={24} color="black" />
+        <Text style={styles.footerText}>Account</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.footerElement}
-        onPress={() => navigation.navigate("OrderHistory")}
-      >
-        <FontAwesome5 name="history" size={24} color="black" />
-        <Text style={styles.footerText}>OrderHistory</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-  style={styles.footerElement}
-  onPress={() => navigation.navigate("AccountPage")}
->
-  <FontAwesome5 name="user" size={24} color="black" />
-  <Text style={styles.footerText}>Account</Text>
-</TouchableOpacity>
-
     </View>
   );
 };
