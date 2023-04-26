@@ -93,7 +93,7 @@ const CourierScreen = () => {
         buttonText = "Pending";
         break;
       case "in progress":
-        buttonColor = "yellow";
+        buttonColor = "orange";
         buttonText = "In Progress";
         break;
       default:
@@ -103,13 +103,16 @@ const CourierScreen = () => {
 
     return (
         <TouchableOpacity
-          style={[styles.statusCell, { backgroundColor: buttonColor }]}
+          style={[
+            styles.statusButton,
+            { backgroundColor: buttonColor, justifyContent: "center" },
+          ]}
           onPress={() => changeOrderStatus(orderId, status)}
         >
-          <Text style={styles.statusText}>{buttonText}</Text>
+          <Text style={[styles.statusButtonText, { color: "white" }]}>{buttonText.toUpperCase()}</Text>
         </TouchableOpacity>
       );
-};
+    };
   
   
   
@@ -151,6 +154,13 @@ const CourierScreen = () => {
           <Text style={styles.orderIdCell}>{item.id}</Text>
           <Text style={styles.addressCell}>{item.customer_address}</Text>
           {renderStatusButton(item.status, item.id)}
+
+          {/* <TouchableOpacity
+  onPress={() => handleOrderView(order)}
+>
+  <MaterialCommunityIcons name="magnify-plus" size={24} color="black" />
+</TouchableOpacity> */}
+
           <TouchableOpacity
             style={styles.viewCell}
             onPress={() => handleOrderView(item)}
@@ -182,39 +192,50 @@ const CourierScreen = () => {
     }
 
     return (
-      <>
-        {modalVisible && <View style={styles.dimBackground} />}
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(false);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>
-                  {selectedOrder.restaurant_name}
-                </Text>
-                <Text style={styles.modalTextW}>
-                  Order Date: {selectedOrder.order_date}
-                </Text>
-                <Text style={styles.modalTextW}>
-                  Status: {selectedOrder.status}
-                </Text>
-                <Text style={styles.modalTextW}>
-                  Courier: {selectedOrder.courier_name}
-                </Text>
-                <TouchableOpacity
-                  style={styles.closeButton}
-                  onPress={handleCloseModal}
-                >
-                  <FontAwesome name="times" size={24} color="white" />
-                </TouchableOpacity>
+        <>
+          {modalVisible && <View style={styles.dimBackground} />}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(false);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>
+                    DELIVERY DETAILS
+                  </Text>
+                  <Text style={styles.modalStatus}>
+                    STATUS: {selectedOrder.status.toUpperCase()}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={handleCloseModal}
+                  >
+                    <FontAwesome name="times" size={24} color="white" />
+                  </TouchableOpacity>
               </View>
+              <View style={styles.modalInfoContainer}>
+              <View style={styles.modalInfoRow}>
+  <Text style={styles.modalInfoLabel}>Delivery Address:</Text>
+  <Text style={[styles.modalInfoValue, {numberOfLines: 2}]}>{selectedOrder.customer_address}</Text>
+</View>
+<View style={styles.modalInfoRow}>
+  <Text style={styles.modalInfoLabel}>Restaurant:</Text>
+  <Text style={[styles.modalInfoValue, {numberOfLines: 2}]}>{selectedOrder.restaurant_name}</Text>
+</View>
+<View style={styles.modalInfoRow}>
+  <Text style={styles.modalInfoLabel}>Order Date:</Text>
+  <Text style={[styles.modalInfoValue, {numberOfLines: 2}]}>{selectedOrder.created_at}</Text>
+</View>
+
+</View>
+
               <View style={styles.modalProductsContainer}>
+                <Text style={styles.modalInfoBold}>Order Details:</Text>
                 {selectedOrder.products.map((products, index) => (
                   <View
                     key={index}
@@ -268,6 +289,7 @@ const CourierScreen = () => {
           keyExtractor={(item) => item.id.toString()}
         />
       )}
+      {renderModal()}
       </View> 
   );
 };
@@ -283,9 +305,55 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 1,
   },
-
+  modalInfoRow: {
+    flexDirection: "row",
+    // justifyContent: "space-between",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginBottom: 5,
+    width: "70%",
+  },
+  modalInfoLabel: {
+    fontSize: 16,
+    color: "#000",
+    marginRight: 10,
+  },
+  modalInfoValue: {
+    fontSize: 16,
+    color: "#000",
+  },
+  
+  modalInfoContainer: {
+    alignSelf: "stretch",
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  modalInfoBold: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  modalInfo: {
+    fontSize: 16,
+    color: "#000",
+    marginBottom: 5,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#DA583B",
+    marginBottom: 5,
+    textAlign: "center",
+    width: "100%",
+  },
+  modalStatus: {
+    color: "#fff",
+    marginBottom: 5,
+    textAlign: "center",
+    width: "100%",
+  },
   statusButton: {
-    flex: 1.3,
+    flex: 1.2,
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
@@ -320,7 +388,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   statusCell: {
-    flex: 1.3,
+    flex: 1.2,
     textAlign: "center",
     marginLeft: 20,
     fontWeight: "bold",
@@ -333,7 +401,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   addressCell: {
-    flex: 1.4,
+    flex: 1.6,
     textAlign: "left",
     fontWeight: "bold",
   },
@@ -382,13 +450,6 @@ const styles = StyleSheet.create({
     width: "108%",
     top: -10,
   },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#DA583B",
-    marginBottom: 5,
-    marginLeft: 15,
-  },
   modalText: {
     color: "#000",
     marginLeft: 15,
@@ -424,8 +485,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: "absolute",
-    top: 55,
-    right: 25,
+    top: 30,
+    right: 15,
   },
   modalProductRow: {
     flexDirection: "row",
@@ -492,6 +553,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 10,
   },
+  
 });
 
 export default CourierScreen;
