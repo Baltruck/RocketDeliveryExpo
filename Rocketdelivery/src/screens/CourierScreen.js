@@ -28,6 +28,10 @@ const CourierScreen = () => {
   
 
   const changeOrderStatus = async (orderId, currentStatusName) => {
+    if (currentStatusName.toLowerCase() === "delivered") {
+        console.log("Status is already 'delivered', no action taken.");
+        return;
+      }
     const statusNameToId = {
       pending: 1,
       "in progress": 2,
