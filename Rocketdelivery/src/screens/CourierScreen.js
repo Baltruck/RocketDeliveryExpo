@@ -64,9 +64,9 @@ const CourierScreen = () => {
         console.log("Order status updated successfully.");
         setOrders((prevOrders) =>
           prevOrders.map((order) =>
-            order.id === orderId
-              ? { ...order, order_status_id: newStatusId }
-              : order
+          order.id === orderId
+          ? { ...order, status: Object.keys(statusNameToId).find(key => statusNameToId[key] === newStatusId) }
+          : order
           )
         );
       } else {
