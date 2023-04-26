@@ -25,86 +25,152 @@ const CourierScreen = () => {
     fetchOrders();
   }, []);
 
-  const renderStatusButton = (status) => {
-    let backgroundColor;
-    const statusLowerCase = status.toLowerCase();
-    
-    switch (statusLowerCase) {
-      case "delivered":
-        backgroundColor = "green";
-        break;
-      case "pending":
-        backgroundColor = "red";
-        break;
-      case "in progress":
-        backgroundColor = "yellow";
-        break;
-      default:
-        backgroundColor = "gray";
-    }
-  
-    return (
-      <TouchableOpacity style={[styles.statusButton, { backgroundColor }]}>
-        <Text style={styles.statusButtonText}>{status.toUpperCase()}</Text>
-      </TouchableOpacity>
-    );
-  };
-  
   
 
-  const fetchOrders = async () => {
+  const changeOrderStatus = async (orderId, currentStatusName) => {
+    const statusNameToId = {
+      pending: 1,
+      "in progress": 2,
+      delivered: 3,
+    };
+
+    const currentStatusId = statusNameToId[currentStatusName];
+    let newStatusId;
+
+    if (currentStatusId === 1) {
+      newStatusId = 2;
+    } else if (currentStatusId === 2) {
+      newStatusId = 3;
+    } else {
+      console.error("Invalid currentStatusName:", currentStatusName);
+      return;
+    }
+
+    console.log(`newStatusId: ${newStatusId}`);
+
     try {
-        const userId = await AsyncStorage.getItem("user_id");
-  
-        if (!userId) {
-            console.error("User ID not found in local storage");
-            return;
-        }
-  
-        const response = await fetch(
-          `${redirApi}api/orders?type=courier&id=${userId}`
-        );
-  
+      const response = await fetch(`${redirApi}api/orders/${orderId}/status`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: orderId,
+          order_status_id: newStatusId,
+        }),
+      });
+
       if (response.ok) {
-        const data = await response.json();
-        setOrders(data);
+        console.log("Order status updated successfully.");
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.id === orderId
+              ? { ...order, order_status_id: newStatusId }
+              : order
+          )
+        );
       } else {
-        console.error("Failed to fetch orders");
+        console.error("Error updating order status:", response.statusText);
       }
     } catch (error) {
-      console.error("Error while fetching orders:", error);
-    } finally {
-      setLoading(false);
+      console.error("Error in changeOrderStatus:", error);
     }
   };
+
+
+  const renderStatusButton = (status, orderId) => {
+    switch (status.toLowerCase()) {
+      case "delivered":
+        buttonColor = "green";
+        buttonText = "Delivered";
+        break;
+      case "pending":
+        buttonColor = "red";
+        buttonText = "Pending";
+        break;
+      case "in progress":
+        buttonColor = "yellow";
+        buttonText = "In Progress";
+        break;
+      default:
+        buttonColor = "gray";
+        buttonText = "Unknown";
+    }
+
+    return (
+        <TouchableOpacity
+          style={[styles.statusCell, { backgroundColor: buttonColor }]}
+          onPress={() => changeOrderStatus(orderId, status)}
+        >
+          <Text style={styles.statusText}>{buttonText}</Text>
+        </TouchableOpacity>
+      );
+};
+  
+  
+  
   
 
-  const renderOrder = ({ item }) => (
-    <View style={styles.orderRow}>
-      <Text style={styles.orderIdCell}>{item.id}</Text>
-      <Text style={styles.addressCell}>{item.customer_address}</Text>
-      {renderStatusButton(item.status)}
-      <TouchableOpacity
-        style={styles.viewCell}
-        onPress={() => handleOrderView(item)}
-      >
-        <View style={styles.iconContainer}>
-          <MaterialCommunityIcons name="magnify-plus" size={24} color="black" />
+    const fetchOrders = async () => {
+        try {
+          const userId = await AsyncStorage.getItem("user_id");
+    
+          if (!userId) {
+            console.error("User ID not found in local storage");
+            return;
+          }
+    
+          const response = await fetch(
+            `${redirApi}api/orders?type=courier&id=${userId}`
+          );
+    
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Fetched orders:', data);
+            setOrders(data);
+          } else {
+            console.error("Failed to fetch orders");
+          }
+        } catch (error) {
+          console.error("Error while fetching orders:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+
+  const renderOrder = ({ item }) => {
+    console.log('Rendering order item:', item); 
+  
+    return (
+        <View style={styles.orderRow}>
+          <Text style={styles.orderIdCell}>{item.id}</Text>
+          <Text style={styles.addressCell}>{item.customer_address}</Text>
+          {renderStatusButton(item.status, item.id)}
+          <TouchableOpacity
+            style={styles.viewCell}
+            onPress={() => handleOrderView(item)}
+          >
+            <View style={styles.iconContainer}>
+              <MaterialCommunityIcons name="magnify-plus" size={24} color="black" />
+            </View>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
-    </View>
-  );
+      );
+    };
+  
+  
   
 
-  const handleOrderView = (order) => {
-    setSelectedOrder(order);
-    setModalVisible(true);
-  };
-
-  //function to handle closing the modal
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
+    const handleOrderView = (order) => {
+        setSelectedOrder(order);
+        setModalVisible(true);
+      };
+    
+      const handleCloseModal = () => {
+        setModalVisible(false);
+      };
+    
 
   const renderModal = () => {
     if (!selectedOrder) {
