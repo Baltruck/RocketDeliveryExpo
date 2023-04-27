@@ -63,18 +63,30 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
         return;
       }
 
+      let confirmation_message;
+      if (emailCheckbox && phoneCheckbox) {
+        confirmation_message = "both";
+      } else if (emailCheckbox) {
+        confirmation_message = "email";
+      } else if (phoneCheckbox) {
+        confirmation_message = "phone";
+      } else {
+        confirmation_message = "none";
+      }
+
       // Exemple of data to send to the API
-      const data = {
-        restaurant_id: restaurant.id,
-        customer_id: customerId,
-        products: products
-          .filter((item) => item.quantity > 0)
-          .map((item) => ({
-            id: item.id,
-            quantity: item.quantity,
-            cost: item.cost,
-          })),
-      };
+    const data = {
+      restaurant_id: restaurant.id,
+      customer_id: customerId,
+      products: products
+        .filter((item) => item.quantity > 0)
+        .map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+          cost: item.cost,
+        })),
+      confirmation_message: confirmation_message,
+    };
 
       // POST request to the API
       const response = await fetch(`${redirApi}api/orders`, {
