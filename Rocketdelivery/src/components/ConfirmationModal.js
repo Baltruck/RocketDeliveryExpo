@@ -52,17 +52,17 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
   // Function to handle the order confirmation
   const handleConfirmOrder = async () => {
     setOrderStatus("processing");
-
+  
     try {
       // Get the customer ID from local storage
       const customerId = await AsyncStorage.getItem("customer_id");
-
+  
       if (!customerId) {
         console.error("Customer ID not found in local storage");
         setOrderStatus("failure");
         return;
       }
-
+  
       let confirmation_message;
       if (emailCheckbox && phoneCheckbox) {
         confirmation_message = "both";
@@ -73,21 +73,21 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
       } else {
         confirmation_message = "none";
       }
-
+  
       // Exemple of data to send to the API
-    const data = {
-      restaurant_id: restaurant.id,
-      customer_id: customerId,
-      products: products
-        .filter((item) => item.quantity > 0)
-        .map((item) => ({
-          id: item.id,
-          quantity: item.quantity,
-          cost: item.cost,
-        })),
-      confirmation_message: confirmation_message,
-    };
-
+      const data = {
+        restaurant_id: restaurant.id,
+        customer_id: customerId,
+        products: products
+          .filter((item) => item.quantity > 0)
+          .map((item) => ({
+            id: item.id,
+            quantity: item.quantity,
+            cost: item.cost,
+          })),
+        confirmation_message: confirmation_message,
+      };
+  
       // POST request to the API
       const response = await fetch(`${redirApi}api/orders`, {
         method: "POST",
@@ -96,8 +96,14 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
         },
         body: JSON.stringify(data),
       });
-
+  
+      // Get the response data
+      const responseData = await response.json();
+  
       if (response.ok) {
+        // Get the order ID from the response data
+        const order_id = responseData.order_id;
+  
         setOrderStatus("success");
         setTimeout(() => {
           resetModal();
@@ -111,6 +117,7 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
       setOrderStatus("failure");
     }
   };
+  
 
   const resetModal = () => {
     setOrderStatus("pending");
