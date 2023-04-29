@@ -7,6 +7,8 @@ import HomeScreen from './src/screens/HomeScreen';
 import DetailsScreen from './src/screens/DetailsScreen';
 import AppNavigator from './src/AppNavigator';
 import { useFonts } from 'expo-font';
+import AccountSelectorScreen from "./src/screens/AccountSelectorScreen";
+import CourierScreen from "./src/screens/CourierScreen";
 
 export default function App() {
   const [fontsLoaded] = useFonts({

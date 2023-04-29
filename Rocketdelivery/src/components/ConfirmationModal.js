@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import redirApi from "../components/NgrokUrl";
+import { CheckBox } from "react-native-elements";
+
 
 import {
   Modal,
@@ -14,7 +16,11 @@ import {
 //add icon
 import { FontAwesome } from "@expo/vector-icons";
 
+
 const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
+  const [emailCheckbox, setEmailCheckbox] = useState(false);
+  const [phoneCheckbox, setPhoneCheckbox] = useState(false);
+
   console.log("Order details:", orderDetails);
   console.log("Products in ConfirmationModal:", orderDetails.products);
   const { restaurant, products } = orderDetails;
@@ -46,17 +52,28 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
   // Function to handle the order confirmation
   const handleConfirmOrder = async () => {
     setOrderStatus("processing");
-
+  
     try {
       // Get the customer ID from local storage
       const customerId = await AsyncStorage.getItem("customer_id");
-
+  
       if (!customerId) {
         console.error("Customer ID not found in local storage");
         setOrderStatus("failure");
         return;
       }
-
+  
+      let confirmation_message;
+      if (emailCheckbox && phoneCheckbox) {
+        confirmation_message = "both";
+      } else if (emailCheckbox) {
+        confirmation_message = "email";
+      } else if (phoneCheckbox) {
+        confirmation_message = "phone";
+      } else {
+        confirmation_message = "none";
+      }
+  
       // Exemple of data to send to the API
       const data = {
         restaurant_id: restaurant.id,
@@ -68,8 +85,9 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
             quantity: item.quantity,
             cost: item.cost,
           })),
+        confirmation_message: confirmation_message,
       };
-
+  
       // POST request to the API
       const response = await fetch(`${redirApi}api/orders`, {
         method: "POST",
@@ -78,8 +96,14 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
         },
         body: JSON.stringify(data),
       });
-
+  
+      // Get the response data
+      const responseData = await response.json();
+  
       if (response.ok) {
+        // Get the order ID from the response data
+        const order_id = responseData.order_id;
+  
         setOrderStatus("success");
         setTimeout(() => {
           resetModal();
@@ -93,6 +117,7 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
       setOrderStatus("failure");
     }
   };
+  
 
   const resetModal = () => {
     setOrderStatus("pending");
@@ -133,9 +158,11 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
           <TouchableOpacity
             style={styles.confirmOrderButton}
             onPress={handleConfirmOrder}
-            disabled={orderStatus === "processing"}
+            disabled={orderStatus === "processing" || (!emailCheckbox && !phoneCheckbox)}
           >
-            <Text style={styles.confirmOrderButtonText}>CONFIRM ORDER</Text>
+            <Text style={styles.confirmOrderButtonText}>
+              {emailCheckbox || phoneCheckbox ? "CONFIRM ORDER" : "IN PROGRESS"}
+            </Text>
           </TouchableOpacity>
         );
     }
@@ -182,6 +209,26 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
               TOTAL: $ {(totalCost / 100).toFixed(2)}
             </Text>
           </View>
+          <View style={styles.checkboxContainer}>
+  <Text style={styles.confirmationText}>
+    Would you like to receive your order confirmation by email and/or text?
+  </Text>
+  <View style={styles.checkboxes}>
+    <CheckBox
+      title="By Email"
+      checked={emailCheckbox}
+      onPress={() => setEmailCheckbox(!emailCheckbox)}
+      containerStyle={styles.checkbox}
+    />
+    <CheckBox
+      title="By Phone"
+      checked={phoneCheckbox}
+      onPress={() => setPhoneCheckbox(!phoneCheckbox)}
+      containerStyle={styles.checkbox}
+    />
+  </View>
+</View>
+
 
           {renderOrderButton()}
         </View>
@@ -191,6 +238,26 @@ const ConfirmationModal = ({ modalVisible, setModalVisible, orderDetails }) => {
 };
 
 const styles = StyleSheet.create({
+
+  checkboxContainer: {
+    alignSelf: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  confirmationText: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  checkboxes: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  checkbox: {
+    backgroundColor: "transparent",
+    borderWidth: 0,
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
